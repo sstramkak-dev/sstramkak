@@ -14,7 +14,7 @@
             --text-main: #1e293b;
             --text-light: #64748b;
             --white: #ffffff;
-            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
         }
 
         body {
@@ -26,132 +26,39 @@
             color: var(--text-main);
         }
 
-        /* --- Sidebar --- */
-        .sidebar {
-            width: 280px;
-            background: var(--white);
-            border-right: 1px solid #e2e8f0;
-            display: flex;
-            flex-direction: column;
-            padding: 40px 20px;
-        }
+        .sidebar { width: 280px; background: var(--white); border-right: 1px solid #e2e8f0; display: flex; flex-direction: column; padding: 40px 20px; }
+        .sidebar h2 { color: var(--primary-green); font-size: 22px; font-weight: 700; margin-bottom: 40px; text-align: center; line-height: 1.4; }
 
-        .sidebar h2 {
-            color: var(--primary-green);
-            font-size: 22px;
-            font-weight: 700;
-            margin-bottom: 40px;
-            text-align: center;
-            line-height: 1.4;
-        }
+        .nav-btn { background: none; border: none; padding: 14px 18px; text-align: left; font-size: 16px; font-weight: 600; cursor: pointer; border-radius: 12px; margin-bottom: 10px; color: var(--text-light); transition: 0.2s; }
+        .nav-btn.active { background-color: var(--primary-green); color: white; box-shadow: 0 10px 15px -3px rgba(30, 166, 71, 0.3); }
 
-        .nav-btn {
-            background: none;
-            border: none;
-            padding: 14px 18px;
-            text-align: left;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            border-radius: 12px;
-            margin-bottom: 10px;
-            transition: all 0.2s;
-            color: var(--text-light);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+        .main-content { flex-grow: 1; padding: 40px; overflow-y: auto; }
+        .card { background: var(--white); padding: 28px; border-radius: 20px; box-shadow: var(--shadow); margin-bottom: 30px; border: 1px solid #f1f5f9; }
 
-        .nav-btn:hover {
-            background-color: #f1f5f9;
-            color: var(--primary-green);
-        }
-
-        .nav-btn.active {
-            background-color: var(--primary-green);
-            color: white;
-            box-shadow: 0 10px 15px -3px rgba(30, 166, 71, 0.3);
-        }
-
-        /* --- Main Content --- */
-        .main-content {
-            flex-grow: 1;
-            padding: 40px;
-            overflow-y: auto;
-        }
-
-        .card {
-            background: var(--white);
-            padding: 28px;
-            border-radius: 20px;
-            box-shadow: var(--shadow);
-            margin-bottom: 30px;
-            border: 1px solid #f1f5f9;
-        }
-
-        .balance-card {
-            background: linear-gradient(135deg, var(--primary-green) 0%, #15803d 100%);
-            color: white;
-            max-width: 320px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .balance-card small { opacity: 0.8; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .balance-card { background: linear-gradient(135deg, var(--primary-green) 0%, #15803d 100%); color: white; max-width: 320px; }
+        .balance-card small { opacity: 0.8; font-size: 14px; text-transform: uppercase; }
         .balance-card h1 { margin: 10px 0 0; font-size: 32px; font-weight: 700; }
 
-        /* --- Form & Table --- */
         .grid { display: flex; gap: 30px; flex-wrap: wrap; }
-        .form-container { flex: 1; min-width: 320px; height: fit-content; }
-        .table-container { flex: 2; min-width: 450px; }
+        .form-container { flex: 1; min-width: 320px; }
+        .table-container { flex: 2; min-width: 500px; }
 
-        h1 { font-size: 20px; margin-bottom: 20px; font-weight: 700; }
-
-        input {
-            width: 100%;
-            padding: 14px;
-            margin: 12px 0;
-            border: 1.5px solid #e2e8f0;
-            border-radius: 12px;
-            box-sizing: border-box;
-            font-size: 16px;
-            transition: border-color 0.2s;
-            font-family: inherit;
-        }
-
+        label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 5px; color: var(--text-main); }
+        input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1.5px solid #e2e8f0; border-radius: 10px; box-sizing: border-box; font-family: inherit; font-size: 15px; }
         input:focus { outline: none; border-color: var(--primary-green); }
 
-        .submit-btn {
-            background: var(--primary-green);
-            color: white;
-            border: none;
-            padding: 16px;
-            border-radius: 12px;
-            cursor: pointer;
-            width: 100%;
-            font-weight: 700;
-            font-size: 16px;
-            font-family: inherit;
-            transition: background 0.2s;
-        }
-
+        .submit-btn { background: var(--primary-green); color: white; border: none; padding: 16px; border-radius: 12px; cursor: pointer; width: 100%; font-weight: 700; font-size: 16px; font-family: inherit; }
         .submit-btn:hover { background: var(--hover-green); }
 
-        /* --- Table Styling --- */
-        .table-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .search-group { display: flex; align-items: center; gap: 10px; }
-        .search-group input[type="date"] { width: auto; padding: 8px 12px; margin: 0; }
-
         table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; padding: 15px; color: var(--text-light); font-size: 13px; text-transform: uppercase; border-bottom: 2px solid #f1f5f9; }
-        td { padding: 18px 15px; border-bottom: 1px solid #f1f5f9; font-size: 15px; }
+        th { text-align: left; padding: 12px; color: var(--text-light); font-size: 12px; border-bottom: 2px solid #f1f5f9; }
+        td { padding: 15px 12px; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
 
-        .btn-icon { border: none; background: #f8fafc; cursor: pointer; font-size: 16px; padding: 10px; border-radius: 10px; transition: 0.2s; margin-left: 5px; }
+        .btn-icon { border: none; background: #f8fafc; cursor: pointer; font-size: 16px; padding: 8px; border-radius: 8px; margin-left: 5px; transition: 0.2s; }
         .btn-edit { color: #2563eb; }
         .btn-delete { color: #dc2626; }
-        .btn-icon:hover { transform: translateY(-2px); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
-
-        #status { font-weight: 600; font-size: 14px; margin-top: 15px; display: block; }
+        
+        .remark-text { font-size: 12px; color: var(--text-light); font-style: italic; }
     </style>
 </head>
 <body>
@@ -171,26 +78,33 @@
         <div class="grid">
             <div class="card form-container">
                 <h1 id="formTitle">ការដាក់ប្រាក់ថ្មី</h1>
-                <label style="font-size: 14px; font-weight: 600;">ចំនួនទឹកប្រាក់ ($)</label>
-                <input type="number" id="depositAmount" placeholder="0.00">
+                
+                <label>សាច់ប្រាក់ (Cash $)</label>
+                <input type="number" id="cashInput" placeholder="0.00">
+                
+                <label>ជំពាក់ (Credit $)</label>
+                <input type="number" id="creditInput" placeholder="0.00">
+                
+                <label>ចំណាំ (Remark)</label>
+                <input type="text" id="remarkInput" placeholder="បញ្ជាក់ផ្សេងៗ...">
+                
                 <button class="submit-btn" id="saveBtn" onclick="sendToDrive()">រក្សាទុកទិន្នន័យ</button>
-                <span id="status" style="text-align: center; color: var(--text-light);"></span>
+                <span id="status" style="display:block; text-align:center; margin-top:15px; font-size:14px;"></span>
             </div>
 
             <div class="card table-container">
-                <div class="table-header">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
                     <h1>ប្រតិបត្តិការថ្មីៗ</h1>
-                    <div class="search-group">
-                        <input type="date" id="dateSearch" onchange="filterTransactions()">
-                        <button onclick="resetSearch()" style="background:none; border:none; color:var(--primary-green); cursor:pointer; font-size:14px; font-weight:600;">បង្ហាញទាំងអស់</button>
-                    </div>
+                    <input type="date" id="dateSearch" onchange="filterTransactions()" style="width:auto; margin:0; padding:8px;">
                 </div>
                 <table>
                     <thead>
                         <tr>
                             <th>កាលបរិច្ឆេទ</th>
-                            <th>ចំនួនទឹកប្រាក់</th>
-                            <th style="text-align: right;">សកម្មភាព</th>
+                            <th>សាច់ប្រាក់</th>
+                            <th>ជំពាក់</th>
+                            <th>ចំណាំ</th>
+                            <th style="text-align:right;">សកម្មភាព</th>
                         </tr>
                     </thead>
                     <tbody id="tableBody"></tbody>
@@ -205,118 +119,86 @@
         let editingFileId = null;
 
         async function sendToDrive() {
-            const amount = document.getElementById('depositAmount').value;
-            if (!amount) return;
+            const cash = document.getElementById('cashInput').value || 0;
+            const credit = document.getElementById('creditInput').value || 0;
+            const remark = document.getElementById('remarkInput').value || "";
+
+            if (cash == 0 && credit == 0) return alert("សូមបញ្ចូលចំនួនទឹកប្រាក់");
 
             const payload = editingFileId 
-                ? { action: "UPDATE", fileId: editingFileId, newData: { type: "Deposit", amount: amount, timestamp: new Date().toISOString() } }
-                : { type: "Deposit", amount: amount, timestamp: new Date().toISOString() };
+                ? { action: "UPDATE", fileId: editingFileId, newData: { cash, credit, remark, timestamp: new Date().toISOString() } }
+                : { cash, credit, remark, timestamp: new Date().toISOString() };
 
-            document.getElementById('status').innerText = "⏳ កំពុងដំណើរការ...";
+            document.getElementById('status').innerText = "⏳ កំពុងរក្សាទុក...";
             
-            try {
-                await fetch(WEB_APP_URL, { method: "POST", mode: "no-cors", body: JSON.stringify(payload) });
-                resetForm();
-                setTimeout(loadTransactions, 2500); 
-            } catch(e) {
-                document.getElementById('status').innerText = "❌ មានបញ្ហា!";
-            }
+            await fetch(WEB_APP_URL, { method: "POST", mode: "no-cors", body: JSON.stringify(payload) });
+            resetForm();
+            setTimeout(loadTransactions, 2000); 
         }
 
         async function loadTransactions() {
-            const tableBody = document.getElementById('tableBody');
-            tableBody.innerHTML = "<tr><td colspan='3' style='text-align:center'>កំពុងផ្ទុក...</td></tr>";
-
-            try {
-                const response = await fetch(WEB_APP_URL);
-                const rawData = await response.json();
-                allTransactions = rawData.filter(item => item && item.amount);
-                renderTable(allTransactions);
-            } catch (e) {
-                tableBody.innerHTML = "<tr><td colspan='3' style='text-align:center'>មិនអាចទាញទិន្នន័យបានទេ។</td></tr>";
-            }
+            const response = await fetch(WEB_APP_URL);
+            const rawData = await response.json();
+            allTransactions = rawData.filter(item => item && (item.cash || item.credit));
+            renderTable(allTransactions);
         }
 
         function renderTable(data) {
             const tableBody = document.getElementById('tableBody');
             const balanceEl = document.getElementById('totalBalance');
             tableBody.innerHTML = "";
-            let total = 0;
-
-            if (!data || data.length === 0) {
-                tableBody.innerHTML = "<tr><td colspan='3' style='text-align:center; padding: 40px; color: #94a3b8;'>មិនទាន់មានទិន្នន័យនៅឡើយ</td></tr>";
-                balanceEl.innerText = "$0.00";
-                return;
-            }
+            let grandTotal = 0;
 
             data.forEach(item => {
-                const amountValue = parseFloat(item.amount) || 0;
-                total += amountValue;
-
-                let dateDisplay = "N/A";
-                if (item.timestamp) {
-                    const d = new Date(item.timestamp);
-                    if (!isNaN(d.getTime())) {
-                        dateDisplay = d.toLocaleDateString('km-KH');
-                    }
-                }
+                const c = parseFloat(item.cash) || 0;
+                const cr = parseFloat(item.credit) || 0;
+                grandTotal += (c + cr);
 
                 tableBody.innerHTML += `
                     <tr>
-                        <td style="font-weight: 600;">${dateDisplay}</td>
-                        <td style="font-weight: 700; color: var(--primary-green); font-size: 16px;">$${amountValue.toLocaleString()}</td>
-                        <td style="text-align: right;">
-                            <button class="btn-icon btn-edit" title="កែប្រែ" onclick="editRow('${item.fileId}', '${item.amount}')">✎</button>
-                            <button class="btn-icon btn-delete" title="លុប" onclick="deleteRow('${item.fileId}')">🗑</button>
+                        <td style="font-weight:600;">${new Date(item.timestamp).toLocaleDateString('km-KH')}</td>
+                        <td style="color:var(--primary-green); font-weight:700;">$${c.toLocaleString()}</td>
+                        <td style="color:#e67e22; font-weight:700;">$${cr.toLocaleString()}</td>
+                        <td class="remark-text">${item.remark || '-'}</td>
+                        <td style="text-align:right;">
+                            <button class="btn-icon btn-edit" onclick="editRow('${item.fileId}', '${item.cash}', '${item.credit}', '${item.remark}')">✎</button>
+                            <button class="btn-icon btn-delete" onclick="deleteRow('${item.fileId}')">🗑</button>
                         </td>
                     </tr>`;
             });
-            balanceEl.innerText = `$${total.toLocaleString()}`;
+            balanceEl.innerText = `$${grandTotal.toLocaleString()}`;
         }
 
         async function deleteRow(id) {
-            if (!id || !confirm("តើអ្នកប្រាកដថាចង់លុបមែនទេ?")) return;
-            document.getElementById('status').innerText = "🗑 កំពុងលុប...";
-            
-            try {
-                await fetch(WEB_APP_URL, { method: "POST", mode: "no-cors", body: JSON.stringify({ action: "DELETE", fileId: id }) });
-                allTransactions = allTransactions.filter(t => t.fileId !== id);
-                renderTable(allTransactions);
-                document.getElementById('status').innerText = "✅ លុបរួចរាល់";
-            } catch (e) {
-                alert("កំហុសបច្ចេកទេស! សូមព្យាយាមម្តងទៀត។");
-            }
+            if (!confirm("តើអ្នកប្រាកដថាចង់លុបមែនទេ?")) return;
+            await fetch(WEB_APP_URL, { method: "POST", mode: "no-cors", body: JSON.stringify({ action: "DELETE", fileId: id }) });
+            loadTransactions();
         }
 
-        function filterTransactions() {
-            const searchDate = document.getElementById('dateSearch').value;
-            if (!searchDate) { renderTable(allTransactions); return; }
-            const filtered = allTransactions.filter(item => {
-                const itemDate = new Date(item.timestamp).toISOString().split('T')[0];
-                return itemDate === searchDate;
-            });
-            renderTable(filtered);
-        }
-
-        function resetSearch() {
-            document.getElementById('dateSearch').value = "";
-            renderTable(allTransactions);
-        }
-
-        function editRow(id, amount) {
+        function editRow(id, cash, credit, remark) {
             editingFileId = id;
-            document.getElementById('depositAmount').value = amount;
+            document.getElementById('cashInput').value = cash;
+            document.getElementById('creditInput').value = credit;
+            document.getElementById('remarkInput').value = remark;
             document.getElementById('formTitle').innerText = "កែប្រែទិន្នន័យ";
             document.getElementById('saveBtn').innerText = "ធ្វើបច្ចុប្បន្នភាព";
-            window.scrollTo({top: 0, behavior: 'smooth'});
         }
 
         function resetForm() {
             editingFileId = null;
-            document.getElementById('depositAmount').value = "";
+            document.getElementById('cashInput').value = "";
+            document.getElementById('creditInput').value = "";
+            document.getElementById('remarkInput').value = "";
             document.getElementById('formTitle').innerText = "ការដាក់ប្រាក់ថ្មី";
-            document.getElementById('saveBtn').innerText = "រក្សាទុកទិន្នន័យ";
+            document.getElementById('saveBtn').innerText = "រក្សាទុក";
             document.getElementById('status').innerText = "✅ រួចរាល់";
+        }
+
+        function filterTransactions() {
+            const date = document.getElementById('dateSearch').value;
+            if (!date) return renderTable(allTransactions);
+            const filtered = allTransactions.filter(item => new Date(item.timestamp).toISOString().split('T')[0] === date);
+            renderTable(filtered);
         }
 
         window.onload = loadTransactions;
