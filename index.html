@@ -8,93 +8,51 @@
     
     <style>
         :root { 
-            --primary: #1EA647; 
-            --bg: #f4f7f6; 
-            --text-main: #2c3e50;
+            --primary: #1EA647; --bg: #f4f7f6; --text-main: #2c3e50;
             --font-khmer: 'Kantumruy Pro', sans-serif;
+            --danger: #ef4444; --warning: #f59e0b;
         }
 
-        body { 
-            font-family: var(--font-khmer); 
-            margin: 0; display: flex; 
-            background: var(--bg); color: var(--text-main);
-            -webkit-font-smoothing: antialiased;
-        }
-
-        .sidebar { 
-            width: 260px; background: white; height: 100vh; 
-            border-right: 1px solid #e0e0e0; padding: 30px 20px; 
-            position: fixed; box-shadow: 2px 0 10px rgba(0,0,0,0.02);
-        }
-
-        .sidebar h2 {
-            font-size: 20px; font-weight: 700; line-height: 1.5;
-            color: var(--primary); text-align: center;
-            margin-bottom: 40px; border-bottom: 2px solid #f0f0f0; padding-bottom: 20px;
-        }
-
+        body { font-family: var(--font-khmer); margin: 0; display: flex; background: var(--bg); color: var(--text-main); }
+        .sidebar { width: 260px; background: white; height: 100vh; border-right: 1px solid #e0e0e0; padding: 30px 20px; position: fixed; }
+        .sidebar h2 { font-size: 20px; font-weight: 700; color: var(--primary); text-align: center; border-bottom: 2px solid #f0f0f0; padding-bottom: 20px; }
         .main { margin-left: 300px; padding: 40px; flex: 1; }
 
-        .nav-btn { 
-            width: 100%; padding: 14px 18px; margin-bottom: 12px; 
-            border: none; background: #f8f9fa; border-radius: 12px; 
-            cursor: pointer; text-align: left; font-weight: 600; 
-            font-family: var(--font-khmer); font-size: 15px; color: #5f6368;
-            transition: all 0.3s ease;
-        }
+        .nav-btn { width: 100%; padding: 14px; margin-bottom: 12px; border: none; background: #f8f9fa; border-radius: 12px; cursor: pointer; text-align: left; font-weight: 600; font-family: var(--font-khmer); transition: 0.3s; }
+        .nav-btn.active { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(30, 166, 71, 0.2); }
 
-        .nav-btn.active { 
-            background: var(--primary); color: white; 
-            box-shadow: 0 4px 12px rgba(30, 166, 71, 0.25);
-        }
-
-        .card { 
-            background: white; padding: 25px; border-radius: 16px; 
-            box-shadow: 0 4px 20px rgba(0,0,0,0.04); margin-bottom: 30px; 
-        }
-
-        h3 { font-size: 18px; font-weight: 700; color: #1a73e8; margin-top: 0; }
-
-        .grid { 
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); 
-            gap: 15px; margin-bottom: 15px; 
-        }
-
+        .card { background: white; padding: 25px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); margin-bottom: 30px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 15px; }
         .label-blue { color: #1a73e8; font-weight: 700; margin-bottom: 10px; display: block; border-left: 4px solid #1a73e8; padding-left: 10px; }
+        input { width: 100%; padding: 12px; border: 1.5px solid #dee2e6; border-radius: 10px; font-family: var(--font-khmer); }
+        input:focus { border-color: var(--primary); outline: none; }
+        .btn-save { background: var(--primary); color: white; border: none; padding: 16px; border-radius: 12px; width: 100%; cursor: pointer; font-weight: 700; font-family: var(--font-khmer); margin-top: 10px; }
 
-        label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; color: #6c757d; }
-
-        input { 
-            width: 100%; padding: 12px; border: 1.5px solid #dee2e6; 
-            border-radius: 10px; box-sizing: border-box; 
-            font-family: var(--font-khmer); font-size: 14px;
-        }
-
-        input:focus { outline: none; border-color: var(--primary); }
-
-        .btn-save { 
-            background: var(--primary); color: white; border: none; 
-            padding: 16px; border-radius: 12px; width: 100%; 
-            cursor: pointer; font-weight: 700; font-size: 16px; 
-            font-family: var(--font-khmer); margin-top: 10px;
-        }
+        /* Action Buttons */
+        .action-cell { display: flex; gap: 8px; }
+        .icon-btn { border: none; background: none; cursor: pointer; padding: 6px; border-radius: 8px; transition: 0.2s; display: flex; align-items: center; }
+        .icon-btn.edit:hover { background: #fef3c7; }
+        .icon-btn.delete:hover { background: #fee2e2; }
+        .icon-btn svg { width: 18px; height: 18px; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+        .icon-edit { stroke: var(--warning); }
+        .icon-delete { stroke: var(--danger); }
 
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         th { background: #f8f9fa; padding: 12px; text-align: left; font-size: 12px; color: #6c757d; border-bottom: 2px solid #edf2f7; }
         td { padding: 12px; border-bottom: 1px solid #f1f3f5; font-size: 13px; }
-        
-        .btn-del { color: #d93025; cursor: pointer; border: none; background: #fff5f5; padding: 5px 10px; border-radius: 6px; font-family: var(--font-khmer); font-size: 11px; }
-
-        #status { font-weight: 600; font-size: 14px; margin-bottom: 15px; padding: 10px; border-radius: 8px; }
         .hidden { display: none; }
+        #status { font-weight: 600; font-size: 14px; margin-bottom: 15px; min-height: 20px; }
+        
+        /* Highlight row when editing */
+        .editing { background-color: #fff9db !important; }
     </style>
 </head>
 <body>
 
 <div class="sidebar">
     <h2>ស្មាតសប អ៊េចប្រេស<br>ត្រាំកក់</h2>
-    <button class="nav-btn active" onclick="showTab('deposit', this)">📊 ការដាក់ប្រាក់</button>
-    <button class="nav-btn" onclick="showTab('sales', this)">🛒 ការលក់ប្រចាំថ្ងៃ</button>
+    <button class="nav-btn active" id="btnDep" onclick="showTab('deposit', this)">📊 ការដាក់ប្រាក់</button>
+    <button class="nav-btn" id="btnSal" onclick="showTab('sales', this)">🛒 ការលក់ប្រចាំថ្ងៃ</button>
 </div>
 
 <div class="main">
@@ -102,23 +60,21 @@
 
     <div id="depositTab">
         <div class="card">
-            <h3>💰 បញ្ចូលព័ត៌មានដាក់ប្រាក់</h3>
+            <h3 id="depTitle">💰 បញ្ចូលព័ត៌មានដាក់ប្រាក់</h3>
             <div class="grid">
-                <div><label>កាលបរិច្ឆេទ</label><input type="date" id="dDate"></div>
+                <div><label>ថ្ងៃខែ</label><input type="date" id="dDate"></div>
                 <div><label>ភ្នាក់ងារ</label><input type="text" id="dAgent" placeholder="ឈ្មោះបុគ្គលិក"></div>
                 <div><label>Cash ($)</label><input type="number" id="dCash" value="0" step="0.01"></div>
                 <div><label>Credit ($)</label><input type="number" id="dCredit" value="0" step="0.01"></div>
             </div>
-            <div style="margin-top: 10px;">
-                <label>ចំណាំ (Remark)</label>
-                <input type="text" id="dRemark" placeholder="បញ្ជាក់បន្ថែមពីការដាក់ប្រាក់...">
-            </div>
-            <button class="btn-save" onclick="save('Deposit')">រក្សាទុកទិន្នន័យ</button>
+            <label>ចំណាំ (Remark)</label>
+            <input type="text" id="dRemark" placeholder="..." style="margin-top:5px; margin-bottom:15px;">
+            <button class="btn-save" id="btnSaveDep" onclick="save('Deposit')">រក្សាទុកទិន្នន័យ</button>
         </div>
         <div class="card">
             <h3>📜 ប្រវត្តិប្រតិបត្តិការ</h3>
             <table>
-                <thead><tr><th>ថ្ងៃទី</th><th>ភ្នាក់ងារ</th><th>សាច់ប្រាក់</th><th>ជំពាក់</th><th>ចំណាំ</th><th>សកម្មភាព</th></tr></thead>
+                <thead><tr><th>ថ្ងៃទី</th><th>ភ្នាក់ងារ</th><th>សាច់ប្រាក់</th><th>ជំពាក់</th><th>ចំណាំ</th><th>Action</th></tr></thead>
                 <tbody id="depBody"></tbody>
             </table>
         </div>
@@ -126,12 +82,11 @@
 
     <div id="salesTab" class="hidden">
         <div class="card">
-            <h3>🛒 បញ្ចូលព័ត៌មានលក់</h3>
+            <h3 id="salTitle">🛒 បញ្ចូលព័ត៌មានលក់</h3>
             <div class="grid">
-                <div><label>កាលបរិច្ឆេទ</label><input type="date" id="sDate"></div>
-                <div><label>ភ្នាក់ងារលក់</label><input type="text" id="sAgent" placeholder="ឈ្មោះបុគ្គលិក"></div>
+                <div><label>ថ្ងៃខែ</label><input type="date" id="sDate"></div>
+                <div><label>ភ្នាក់ងារ</label><input type="text" id="sAgent" placeholder="ឈ្មោះបុគ្គលិក"></div>
             </div>
-            
             <span class="label-blue">📉 ចំនួនលក់ (Units)</span>
             <div class="grid">
                 <div><label>Ads</label><input type="number" id="uAds" value="0"></div>
@@ -139,21 +94,19 @@
                 <div><label>Home</label><input type="number" id="uHome" value="0"></div>
                 <div><label>Fiber</label><input type="number" id="uFiber" value="0"></div>
             </div>
-
             <span class="label-blue">💰 តម្លៃលក់សរុប (Revenue $)</span>
             <div class="grid">
-                <div><label>Top Up ($)</label><input type="number" id="rTopup" value="0" step="0.01"></div>
-                <div><label>SC Shop ($)</label><input type="number" id="rShop" value="0" step="0.01"></div>
-                <div><label>SC Dealer ($)</label><input type="number" id="rDealer" value="0" step="0.01"></div>
-                <div><label>សរុបរួម ($)</label><input type="number" id="rTotal" value="0" step="0.01" style="font-weight:700; color:var(--primary);"></div>
+                <div><label>TopUp ($)</label><input type="number" id="rTopup" value="0"></div>
+                <div><label>Shop ($)</label><input type="number" id="rShop" value="0"></div>
+                <div><label>Dealer ($)</label><input type="number" id="rDealer" value="0"></div>
+                <div><label>សរុបរួម ($)</label><input type="number" id="rTotal" value="0" style="font-weight:700; color:var(--primary);"></div>
             </div>
-            
-            <button class="btn-save" onclick="save('Sales')">រក្សាទុកការលក់</button>
+            <button class="btn-save" id="btnSaveSal" onclick="save('Sales')">រក្សាទុកការលក់</button>
         </div>
         <div class="card">
             <h3>📜 ប្រវត្តិការលក់</h3>
             <table>
-                <thead><tr><th>ថ្ងៃទី</th><th>ភ្នាក់ងារ</th><th>A/S/H/F</th><th>TopUp/Shop/Dealer</th><th>សរុប $</th><th>សកម្មភាព</th></tr></thead>
+                <thead><tr><th>ថ្ងៃទី</th><th>ភ្នាក់ងារ</th><th>A/S/H/F</th><th>TopUp/Shop/Dealer</th><th>សរុប $</th><th>Action</th></tr></thead>
                 <tbody id="salBody"></tbody>
             </table>
         </div>
@@ -163,55 +116,105 @@
 <script>
     const API = "https://script.google.com/macros/s/AKfycbwUAy-Zc-NVXP_gP6Rob_207tXxmWtC5PnDxxHofxT-U6hAHgbLXNXPLBGnitYVX1MVug/exec";
     let store = [];
+    let isEditing = false;
+    let editRowIndex = null;
 
     function showTab(t, btn) {
         document.getElementById('depositTab').classList.toggle('hidden', t !== 'deposit');
         document.getElementById('salesTab').classList.toggle('hidden', t !== 'sales');
         document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
+        cancelEdit(); // Reset editing mode when switching tabs
     }
 
     async function load() {
-        const status = document.getElementById('status');
-        status.innerHTML = "⏳ កំពុងទាញទិន្នន័យ..."; status.style.color = "#1a73e8";
+        msg("⏳ កំពុងទាញទិន្នន័យ...", "#1a73e8");
         try {
             const res = await fetch(API);
             store = await res.json();
             render();
-            status.innerHTML = "✅ ទិន្នន័យបច្ចុប្បន្នភាពចុងក្រោយ"; status.style.color = "#1ea647";
-        } catch (e) { status.innerHTML = "❌ មិនអាចទាញទិន្នន័យបានទេ"; status.style.color = "#d93025"; }
+            msg("✅ បច្ចុប្បន្នភាពរួចរាល់", "var(--primary)");
+        } catch (e) { msg("❌ Error Loading Data", "var(--danger)"); }
     }
 
     function render() {
         const db = document.getElementById('depBody'), sb = document.getElementById('salBody');
         db.innerHTML = sb.innerHTML = "";
+        
+        const editIcon = `<svg class="icon-edit" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>`;
+        const delIcon = `<svg class="icon-delete" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>`;
+
         store.forEach(item => {
-            const btn = `<button class="btn-del" onclick="del('${item.recordType}', ${item.rowIndex})">លុប</button>`;
+            const actions = `<div class="action-cell">
+                <button class="icon-btn edit" onclick="startEdit('${item.recordType}', ${item.rowIndex})" title="កែសម្រួល">${editIcon}</button>
+                <button class="icon-btn delete" onclick="del('${item.recordType}', ${item.rowIndex})" title="លុប">${delIcon}</button>
+            </div>`;
+            
             if (item.recordType === "Deposit") {
-                db.innerHTML += `<tr>
-                    <td>${item.date.split('T')[0]}</td>
-                    <td>${item.agent}</td>
-                    <td>$${item.cash}</td>
-                    <td>$${item.credit}</td>
-                    <td style="font-style:italic; color:#7f8c8d">${item.remark || '-'}</td>
-                    <td>${btn}</td>
-                </tr>`;
+                db.innerHTML += `<tr><td>${item.date.split('T')[0]}</td><td>${item.agent}</td><td>$${item.cash}</td><td>$${item.credit}</td><td>${item.remark || '-'}</td><td>${actions}</td></tr>`;
             } else {
-                sb.innerHTML += `<tr>
-                    <td>${item.date.split('T')[0]}</td>
-                    <td>${item.agent}</td>
-                    <td>${item.gross}/${item.sim}/${item.home}/${item.fiber}</td>
-                    <td>$${item.topup || 0}/$${item.shop || 0}/$${item.dealer || 0}</td>
-                    <td style="font-weight:700; color:var(--primary)">$${item.totalRev}</td>
-                    <td>${btn}</td>
-                </tr>`;
+                sb.innerHTML += `<tr><td>${item.date.split('T')[0]}</td><td>${item.agent}</td><td>${item.gross}/${item.sim}/${item.home}/${item.fiber}</td><td>$${item.topup || 0}/$${item.shop || 0}/$${item.dealer || 0}</td><td>$${item.totalRev}</td><td>${actions}</td></tr>`;
             }
         });
     }
 
+    function startEdit(type, index) {
+        const item = store.find(i => i.recordType === type && i.rowIndex === index);
+        if (!item) return;
+
+        isEditing = true;
+        editRowIndex = index;
+        msg("✍️ កំពុងកែសម្រួលទិន្នន័យ...", "var(--warning)");
+
+        if (type === "Deposit") {
+            showTab('deposit', document.getElementById('btnDep'));
+            document.getElementById('dDate').value = item.date.split('T')[0];
+            document.getElementById('dAgent').value = item.agent;
+            document.getElementById('dCash').value = item.cash;
+            document.getElementById('dCredit').value = item.credit;
+            document.getElementById('dRemark').value = item.remark || "";
+            document.getElementById('btnSaveDep').innerText = "ធ្វើបច្ចុប្បន្នភាព (Update)";
+            document.getElementById('depTitle').innerText = "📝 កែសម្រួលការដាក់ប្រាក់";
+        } else {
+            showTab('sales', document.getElementById('btnSal'));
+            document.getElementById('sDate').value = item.date.split('T')[0];
+            document.getElementById('sAgent').value = item.agent;
+            document.getElementById('uAds').value = item.gross;
+            document.getElementById('uSim').value = item.sim;
+            document.getElementById('uHome').value = item.home;
+            document.getElementById('uFiber').value = item.fiber;
+            document.getElementById('rTopup').value = item.topup;
+            document.getElementById('rShop').value = item.shop;
+            document.getElementById('rDealer').value = item.dealer;
+            document.getElementById('rTotal').value = item.totalRev;
+            document.getElementById('btnSaveSal').innerText = "ធ្វើបច្ចុប្បន្នភាព (Update)";
+            document.getElementById('salTitle').innerText = "📝 កែសម្រួលការលក់";
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function cancelEdit() {
+        isEditing = false;
+        editRowIndex = null;
+        document.getElementById('btnSaveDep').innerText = "រក្សាទុកទិន្នន័យ";
+        document.getElementById('btnSaveSal').innerText = "រក្សាទុកការលក់";
+        document.getElementById('depTitle').innerText = "💰 បញ្ចូលព័ត៌មានដាក់ប្រាក់";
+        document.getElementById('salTitle').innerText = "🛒 បញ្ចូលព័ត៌មានលក់";
+        clearForm();
+    }
+
     async function save(type) {
         let obj = { formType: type, timestamp: new Date().toISOString() };
-        if (type === "Deposit") {
+        
+        // ប្រសិនបើកំពុង Edit យើងត្រូវប្រាប់ API ឱ្យ Delete ជួរចាស់សិន រួចសឹម Add ថ្មី
+        if (isEditing) {
+            msg("🔄 កំពុងធ្វើបច្ចុប្បន្នភាព...", "var(--warning)");
+            await fetch(API, { method: "POST", body: JSON.stringify({ action: "DELETE", recordType: type, rowIndex: editRowIndex }) });
+        } else {
+            msg("⏳ កំពុងរក្សាទុក...", "#1a73e8");
+        }
+
+        if(type === 'Deposit') {
             obj.date = document.getElementById('dDate').value;
             obj.agent = document.getElementById('dAgent').value;
             obj.cash = document.getElementById('dCash').value;
@@ -229,25 +232,27 @@
             obj.dealer = document.getElementById('rDealer').value;
             obj.totalRev = document.getElementById('rTotal').value;
         }
-        
-        if (!obj.date || !obj.agent) return alert("សូមបំពេញកាលបរិច្ឆេទ និងឈ្មោះភ្នាក់ងារ!");
-        
-        document.getElementById('status').innerHTML = "⏳ កំពុងរក្សាទុក...";
+
         await fetch(API, { method: "POST", body: JSON.stringify(obj) });
+        cancelEdit();
         load();
     }
 
     async function del(type, index) {
-        if (!confirm("លុបទិន្នន័យនេះ?")) return;
-        document.getElementById('status').innerHTML = "🗑 កំពុងលុប...";
+        if (!confirm("តើអ្នកចង់លុបទិន្នន័យនេះមែនទេ?")) return;
+        msg("🗑 កំពុងលុប...", "var(--danger)");
         await fetch(API, { method: "POST", body: JSON.stringify({ action: "DELETE", recordType: type, rowIndex: index }) });
         load();
     }
 
-    window.onload = () => {
+    function msg(t, c) { const s = document.getElementById('status'); s.innerText = t; s.style.color = c; }
+    
+    function clearForm() {
+        document.querySelectorAll('input[type="text"], input[type="number"]').forEach(i => i.value = i.type === 'number' ? 0 : "");
         document.querySelectorAll('input[type="date"]').forEach(i => i.value = new Date().toISOString().split('T')[0]);
-        load();
-    };
+    }
+
+    window.onload = load;
 </script>
 </body>
 </html>
