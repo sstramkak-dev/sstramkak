@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet">
-    <title>ស្មាតសប អ៊េចប្រេស ត្រាំកក់ - Dashboard</title>
+    <title>ស្មាតសប អ៊េចប្រេស ត្រាំកក់</title>
     
     <style>
         :root { 
@@ -23,14 +23,11 @@
 
         .card { background: white; padding: 25px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); margin-bottom: 30px; }
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 15px; }
-        .label-blue { color: #1a73e8; font-weight: 700; margin-bottom: 10px; display: block; border-left: 4px solid #1a73e8; padding-left: 10px; }
-        input { width: 100%; padding: 12px; border: 1.5px solid #dee2e6; border-radius: 10px; font-family: var(--font-khmer); }
+        input { width: 100%; padding: 12px; border: 1.5px solid #dee2e6; border-radius: 10px; font-family: var(--font-khmer); box-sizing: border-box; }
         .btn-save { background: var(--primary); color: white; border: none; padding: 16px; border-radius: 12px; width: 100%; cursor: pointer; font-weight: 700; font-family: var(--font-khmer); margin-top: 10px; }
 
         .action-cell { display: flex; gap: 8px; }
         .icon-btn { border: none; background: none; cursor: pointer; padding: 6px; border-radius: 8px; transition: 0.2s; display: flex; align-items: center; }
-        .icon-btn.edit:hover { background: #fef3c7; }
-        .icon-btn.delete:hover { background: #fee2e2; }
         .icon-btn svg { width: 18px; height: 18px; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
         .icon-edit { stroke: var(--warning); }
         .icon-delete { stroke: var(--danger); }
@@ -39,7 +36,7 @@
         th { background: #f8f9fa; padding: 12px; text-align: left; font-size: 12px; color: #6c757d; border-bottom: 2px solid #edf2f7; }
         td { padding: 12px; border-bottom: 1px solid #f1f3f5; font-size: 13px; }
         .hidden { display: none; }
-        #status { font-weight: 600; font-size: 14px; margin-bottom: 15px; }
+        #status { font-weight: 600; font-size: 14px; margin-bottom: 15px; min-height: 20px; }
     </style>
 </head>
 <body>
@@ -57,17 +54,17 @@
         <div class="card">
             <h3>💰 បញ្ចូលព័ត៌មានដាក់ប្រាក់</h3>
             <div class="grid">
-                <div><input type="date" id="dDate"></div>
-                <div><input type="text" id="dAgent" placeholder="ភ្នាក់ងារ"></div>
-                <div><input type="number" id="dCash" placeholder="Cash" step="0.01"></div>
-                <div><input type="number" id="dCredit" placeholder="Credit" step="0.01"></div>
+                <input type="date" id="dDate">
+                <input type="text" id="dAgent" placeholder="ភ្នាក់ងារ">
+                <input type="number" id="dCash" placeholder="Cash ($)" step="0.01">
+                <input type="number" id="dCredit" placeholder="Credit ($)" step="0.01">
             </div>
             <input type="text" id="dRemark" placeholder="ចំណាំ..." style="margin-top:10px;">
             <button class="btn-save" id="btnSaveDep" onclick="save('Deposit')">រក្សាទុកទិន្នន័យ</button>
         </div>
         <div class="card">
             <table>
-                <thead><tr><th>ថ្ងៃទី</th><th>ភ្នាក់ងារ</th><th>Cash</th><th>Credit</th><th>ចំណាំ</th><th>Action</th></tr></thead>
+                <thead><tr><th>ថ្ងៃទី</th><th>ភ្នាក់ងារ</th><th>Cash</th><th>Credit</th><th>Action</th></tr></thead>
                 <tbody id="depBody"></tbody>
             </table>
         </div>
@@ -80,7 +77,6 @@
                 <input type="date" id="sDate">
                 <input type="text" id="sAgent" placeholder="ភ្នាក់ងារ">
             </div>
-            <span class="label-blue">📉 Units & Revenue</span>
             <div class="grid">
                 <input type="number" id="uAds" placeholder="Ads">
                 <input type="number" id="uSim" placeholder="Sim">
@@ -105,7 +101,7 @@
 </div>
 
 <script>
-    const API = "YOUR_SCRIPT_URL_HERE";
+    const API = "ដាក់_URL_WEB_APP_របស់អ្នកនៅទីនេះ";
     let store = [];
     let isEditing = false;
     let editRowIndex = null;
@@ -120,10 +116,12 @@
 
     async function load() {
         document.getElementById('status').innerText = "⏳ កំពុងទាញទិន្នន័យ...";
-        const res = await fetch(API);
-        store = await res.json();
-        render();
-        document.getElementById('status').innerText = "✅ រួចរាល់";
+        try {
+            const res = await fetch(API);
+            store = await res.json();
+            render();
+            document.getElementById('status').innerText = "✅ រួចរាល់";
+        } catch(e) { document.getElementById('status').innerText = "❌ បញ្ហាអ៊ីនធឺណិត"; }
     }
 
     function render() {
@@ -134,11 +132,11 @@
 
         store.forEach(item => {
             const btns = `<div class="action-cell">
-                <button class="icon-btn edit" onclick="startEdit('${item.recordType}', ${item.rowIndex})">${editIco}</button>
-                <button class="icon-btn delete" onclick="del('${item.recordType}', ${item.rowIndex})">${delIco}</button>
+                <button class="icon-btn" onclick="startEdit('${item.recordType}', ${item.rowIndex})">${editIco}</button>
+                <button class="icon-btn" onclick="del('${item.recordType}', ${item.rowIndex})">${delIco}</button>
             </div>`;
             if (item.recordType === "Deposit") {
-                db.innerHTML += `<tr><td>${item.date.split('T')[0]}</td><td>${item.agent}</td><td>$${item.cash}</td><td>$${item.credit}</td><td>${item.remark || '-'}</td><td>${btns}</td></tr>`;
+                db.innerHTML += `<tr><td>${item.date.split('T')[0]}</td><td>${item.agent}</td><td>$${item.cash}</td><td>$${item.credit}</td><td>${btns}</td></tr>`;
             } else {
                 sb.innerHTML += `<tr><td>${item.date.split('T')[0]}</td><td>${item.agent}</td><td>${item.gross}/${item.sim}/${item.home}/${item.fiber}</td><td>$${item.totalRev}</td><td>${btns}</td></tr>`;
             }
@@ -149,17 +147,14 @@
         const item = store.find(i => i.recordType === type && i.rowIndex === index);
         if (!item) return;
         isEditing = true; editRowIndex = index;
-
         if (type === "Deposit") {
-            showTab('deposit', document.getElementById('btnDep'));
             document.getElementById('dDate').value = item.date.split('T')[0];
             document.getElementById('dAgent').value = item.agent;
             document.getElementById('dCash').value = item.cash;
             document.getElementById('dCredit').value = item.credit;
             document.getElementById('dRemark').value = item.remark || "";
-            document.getElementById('btnSaveDep').innerText = "ធ្វើបច្ចុប្បន្នភាព (Update)";
+            document.getElementById('btnSaveDep').innerText = "ធ្វើបច្ចុប្បន្នភាព (Update Row " + index + ")";
         } else {
-            showTab('sales', document.getElementById('btnSal'));
             document.getElementById('sDate').value = item.date.split('T')[0];
             document.getElementById('sAgent').value = item.agent;
             document.getElementById('uAds').value = item.gross;
@@ -170,13 +165,16 @@
             document.getElementById('rShop').value = item.shop;
             document.getElementById('rDealer').value = item.dealer;
             document.getElementById('rTotal').value = item.totalRev;
-            document.getElementById('btnSaveSal').innerText = "ធ្វើបច្ចុប្បន្នភាព (Update)";
+            document.getElementById('btnSaveSal').innerText = "ធ្វើបច្ចុប្បន្នភាព (Update Row " + index + ")";
         }
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     async function save(type) {
-        let obj = { formType: type, action: isEditing ? "UPDATE" : "ADD", rowIndex: editRowIndex, timestamp: new Date().toISOString() };
+        let obj = { 
+            formType: type, action: isEditing ? "UPDATE" : "ADD", 
+            rowIndex: editRowIndex, timestamp: new Date().toISOString() 
+        };
         if(type === 'Deposit') {
             obj.date = document.getElementById('dDate').value;
             obj.agent = document.getElementById('dAgent').value;
@@ -186,16 +184,13 @@
         } else {
             obj.date = document.getElementById('sDate').value;
             obj.agent = document.getElementById('sAgent').value;
-            obj.gross = document.getElementById('uAds').value || 0;
-            obj.sim = document.getElementById('uSim').value || 0;
-            obj.home = document.getElementById('uHome').value || 0;
-            obj.fiber = document.getElementById('uFiber').value || 0;
-            obj.topup = document.getElementById('rTopup').value || 0;
-            obj.shop = document.getElementById('rShop').value || 0;
-            obj.dealer = document.getElementById('rDealer').value || 0;
-            obj.totalRev = document.getElementById('rTotal').value || 0;
+            obj.gross = document.getElementById('uAds').value || 0; obj.sim = document.getElementById('uSim').value || 0;
+            obj.home = document.getElementById('uHome').value || 0; obj.fiber = document.getElementById('uFiber').value || 0;
+            obj.topup = document.getElementById('rTopup').value || 0; obj.shop = document.getElementById('rShop').value || 0;
+            obj.dealer = document.getElementById('rDealer').value || 0; obj.totalRev = document.getElementById('rTotal').value || 0;
         }
-        document.getElementById('status').innerText = "🔄 កំពុងដំណើរការ...";
+
+        document.getElementById('status').innerText = "🔄 កំពុងរក្សាទុក...";
         await fetch(API, { method: "POST", body: JSON.stringify(obj) });
         isEditing = false; editRowIndex = null;
         document.getElementById('btnSaveDep').innerText = "រក្សាទុកទិន្នន័យ";
@@ -205,6 +200,7 @@
 
     async function del(type, index) {
         if (!confirm("លុបទិន្នន័យនេះ?")) return;
+        document.getElementById('status').innerText = "🗑 កំពុងលុប...";
         await fetch(API, { method: "POST", body: JSON.stringify({ action: "DELETE", recordType: type, rowIndex: index }) });
         load();
     }
