@@ -7,41 +7,41 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <title>ស្មាតសប អ៊េចប្រេស ត្រាំកក់</title>
     <style>
-        :root { --primary: #219E42; --danger: #e74c3c; --warning: #f39c12; --bg: #f4f7f6; --white: #ffffff; }
+        :root { --primary: #219E42; --danger: #e74c3c; --warning: #f39c12; --bg: #f8fafb; --white: #ffffff; }
         body { font-family: 'Kantumruy Pro', sans-serif; margin: 0; display: flex; background: var(--bg); color: #2d3436; }
         
-        /* Sidebar */
-        .sidebar { width: 280px; background: var(--white); height: 100vh; position: fixed; border-right: 1px solid #ddd; padding: 30px 20px; box-sizing: border-box; text-align: center; }
-        .logo-container { width: 100px; height: 100px; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .logo-container img { width: 100%; height: 100%; object-fit: contain; }
-        .sidebar h2 { font-size: 18px; color: var(--primary); margin-bottom: 30px; line-height: 1.4; font-weight: 700; }
+        /* Sidebar ប្តូរពណ៌ទៅ #219E42 */
+        .sidebar { width: 280px; background: var(--primary); height: 100vh; position: fixed; padding: 30px 20px; box-sizing: border-box; text-align: center; color: white; box-shadow: 4px 0 10px rgba(0,0,0,0.1); }
+        .logo-container { width: 100px; height: 100px; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; background: white; border-radius: 20px; padding: 5px; }
+        .logo-container img { width: 90%; height: 90%; object-fit: contain; }
+        .sidebar h2 { font-size: 18px; color: white; margin-bottom: 35px; line-height: 1.4; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.1); }
         
-        .nav-btn { width: 100%; padding: 14px; margin-bottom: 10px; border: none; background: transparent; border-radius: 12px; cursor: pointer; text-align: left; font-family: inherit; font-size: 15px; font-weight: 600; color: #636e72; display: flex; align-items: center; gap: 10px; transition: 0.3s; }
-        .nav-btn i { font-size: 18px; width: 25px; }
-        .nav-btn.active { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(33,158,66,0.3); }
+        .nav-btn { width: 100%; padding: 14px 20px; margin-bottom: 12px; border: none; background: transparent; border-radius: 12px; cursor: pointer; text-align: left; font-family: inherit; font-size: 15px; font-weight: 500; color: rgba(255,255,255,0.8); display: flex; align-items: center; gap: 12px; transition: 0.3s; }
+        .nav-btn i { font-size: 18px; }
+        .nav-btn:hover { background: rgba(255,255,255,0.1); color: white; }
+        .nav-btn.active { background: white; color: var(--primary); font-weight: 700; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
 
         /* Main Content */
         .main { margin-left: 280px; padding: 40px; flex: 1; max-width: 1200px; }
-        .card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 25px; border: 1px solid rgba(0,0,0,0.02); }
-        h3 { border-left: 5px solid var(--primary); padding-left: 15px; margin-bottom: 20px; font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 10px; color: #2d3436; }
+        .card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); margin-bottom: 25px; }
+        h3 { border-left: 5px solid var(--primary); padding-left: 15px; font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 10px; color: #333; }
 
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; margin-bottom: 15px; }
         .field { display: flex; flex-direction: column; }
-        .field label { font-size: 12.5px; margin-bottom: 5px; color: #636e72; font-weight: 700; text-transform: uppercase; }
-        input { padding: 12px; border: 1.5px solid #e0e0e0; border-radius: 10px; font-family: inherit; font-size: 14px; background: #fafafa; }
-        input:focus { outline: none; border-color: var(--primary); background: white; box-shadow: 0 0 0 3px rgba(33,158,66,0.1); }
+        .field label { font-size: 12px; margin-bottom: 6px; color: #888; font-weight: 700; text-transform: uppercase; }
+        input { padding: 12px; border: 1.5px solid #eee; border-radius: 10px; font-family: inherit; font-size: 14px; background: #fdfdfd; }
+        input:focus { outline: none; border-color: var(--primary); background: white; }
 
         .btn-save { background: var(--primary); color: white; border: none; padding: 15px; border-radius: 12px; width: 100%; cursor: pointer; font-weight: 700; font-size: 16px; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.2s; }
-        .btn-save:hover { background: #1a8235; transform: translateY(-1px); }
         
         /* Table Styles */
-        .table-container { overflow-x: auto; margin-top: 10px; }
-        table { width: 100%; border-collapse: collapse; min-width: 600px; }
-        th { background: #f8f9fa; padding: 15px 12px; text-align: left; font-size: 12px; color: #94a3b8; border-bottom: 2px solid #eee; text-transform: uppercase; letter-spacing: 0.5px; }
-        td { padding: 14px 12px; border-bottom: 1px solid #f1f1f1; font-size: 14px; }
+        .table-container { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #f8f9fa; padding: 15px 12px; text-align: left; font-size: 12px; color: #999; border-bottom: 2px solid #eee; }
+        td { padding: 14px 12px; border-bottom: 1px solid #f5f5f5; font-size: 14px; }
         
-        .icon-btn { width: 34px; height: 34px; border: none; border-radius: 10px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: 0.2s; font-size: 14px; }
-        .edit-btn { background: #fff9db; color: var(--warning); margin-right: 6px; }
+        .icon-btn { width: 34px; height: 34px; border: none; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: 0.2s; }
+        .edit-btn { background: #fff9db; color: var(--warning); margin-right: 5px; }
         .edit-btn:hover { background: var(--warning); color: white; }
         .del-btn { background: #fff5f5; color: var(--danger); }
         .del-btn:hover { background: var(--danger); color: white; }
@@ -56,9 +56,9 @@
     <div class="logo-container">
         <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxISEhUSEhIVFRUXFRUVFRUVFRUVFRUVFRUWFhUVFRUYHSggGBolGxUVITEhJSkrLi4uFx8zODMtNygtLisBCgoKDg0OGhAQGi0lHx8tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLf/AABEIAOEA4QMBIgACEQEDEQH/xAAbAAABBQEBAAAAAAAAAAAAAAAFAAEDBAYCB//EADoQAAIBAwIEAwYEBQQDAAAAAAABAgMEESExBRJRYQZBcRMigZGhscEyQlLR8BQjYuHxFUNTchZkgv/EABoBAAIDAQEAAAAAAAAAAAAAAAMEAAECBQf/xAAjEQACAgICAgMBAQEAAAAAAAAAAQIRAxIhBDEyEyJBUSMF/9oADAMBAAIRAxEAPwDww6SOnSFAm8YnRx06IDMIdIdIdIo6SOnSOnRFpDpDIdIs6SOnSOnRFpDpDIdIs6SOnSOnRFpDpDIdIs6SOnSOnRFpDpDIdIs6SOnSOnRFpDpDIdIs6SOnSOnRFpDpDIdIs6SOnSOnRFpDIdI6Is6SOnSOnRInTo6TOnSOnRFpDpDIdIs6SOnSOnRFpDpDIdIs6SOnSOnRFpDpDIdIs6SOnSOnRFpDpDIdIs6SOnSOnRFpDpDIdIs6SOnSOnRFpDpDIdIs6SOnSOnRFpDIdI6Is6SOnSOnRInTo6TOnSOnRFpDpDIdIs6SOnSOnRFpDpDIdIs6SOnSOnRFpDpDIdIs6SOnSOnRFpDpDIdIs6SOnSOnRFpDpDIdIs6SOnSOnRFpDpDIdIs6SOnSOnRFpDIdI6Is6SOnSOnRInTo6TOnSOnRFpDpDIdIs6SOnSOnRFpDpDIdIs6SOnSOnRFpDpDIdIs6SOnSOnRFpDpDIdIs6SOnSOnRFpDpDIdIs6SOnSOnRFpDpDIdIs6SOnSOnRFpDIdI6Is6SOnSOnRF/9k=" alt="Smart Logo">
     </div>
-    <h2 id="brandName">ស្មាតសប អ៊េចប្រេស<br>ត្រាំកក់</h2>
+    <h2>ស្មាតសប អ៊េចប្រេស<br>ត្រាំកក់</h2>
     <button class="nav-btn active" onclick="showTab('deposit', this)"><i class="fa-solid fa-wallet"></i> ការដាក់ប្រាក់</button>
-    <button class="nav-btn" onclick="showTab('sales', this)"><i class="fa-solid fa-file-invoice-dollar"></i> ការលក់ប្រចាំថ្ងៃ</button>
+    <button class="nav-btn" onclick="showTab('sales', this)"><i class="fa-solid fa-cart-shopping"></i> ការលក់ប្រចាំថ្ងៃ</button>
 </div>
 
 <div class="main">
@@ -66,15 +66,15 @@
 
     <div id="depositTab">
         <div class="card">
-            <h3 id="depTitle"><i class="fa-solid fa-circle-plus"></i> បញ្ចូលការដាក់ប្រាក់</h3>
+            <h3><i class="fa-solid fa-plus-circle" style="color:var(--primary)"></i> បញ្ចូលការដាក់ប្រាក់</h3>
             <div class="grid">
                 <div class="field"><label>ថ្ងៃខែ</label><input type="date" id="dDate"></div>
-                <div class="field"><label>ភ្នាក់ងារ</label><input type="text" id="dAgent" placeholder="ឈ្មោះ..."></div>
+                <div class="field"><label>ភ្នាក់ងារ</label><input type="text" id="dAgent"></div>
                 <div class="field"><label>Cash ($)</label><input type="number" id="dCash" value="0"></div>
                 <div class="field"><label>Credit ($)</label><input type="number" id="dCredit" value="0"></div>
             </div>
-            <div class="field"><label>ចំណាំ (Remark)</label><input type="text" id="dRemark" placeholder="..."></div>
-            <button class="btn-save" id="btnSaveDep" onclick="save('Deposit')"><i class="fa-solid fa-floppy-disk"></i> រក្សាទុកទិន្នន័យ</button>
+            <div class="field"><label>ចំណាំ</label><input type="text" id="dRemark" placeholder="..."></div>
+            <button class="btn-save" onclick="save('Deposit')"><i class="fa-solid fa-save"></i> រក្សាទុកទិន្នន័យ</button>
         </div>
         <div class="card" style="padding:15px;">
             <div class="table-container">
@@ -88,7 +88,7 @@
 
     <div id="salesTab" class="hidden">
         <div class="card">
-            <h3 id="salTitle"><i class="fa-solid fa-shop"></i> បញ្ចូលការលក់</h3>
+            <h3><i class="fa-solid fa-store" style="color:var(--primary)"></i> បញ្ចូលការលក់</h3>
             <div class="grid">
                 <div class="field"><label>ថ្ងៃខែ</label><input type="date" id="sDate"></div>
                 <div class="field"><label>ភ្នាក់ងារ</label><input type="text" id="sAgent"></div>
@@ -105,7 +105,7 @@
                 <div class="field"><label>SC Dealer</label><input type="number" id="rDealer" value="0"></div>
                 <div class="field"><label>សរុប ($)</label><input type="number" id="rTotal" value="0"></div>
             </div>
-            <button class="btn-save" id="btnSaveSal" onclick="save('Sales')"><i class="fa-solid fa-check-double"></i> រក្សាទុកការលក់</button>
+            <button class="btn-save" onclick="save('Sales')"><i class="fa-solid fa-check-circle"></i> រក្សាទុកការលក់</button>
         </div>
         <div class="card" style="padding:15px;">
             <div class="table-container">
@@ -137,23 +137,22 @@
             state.store = await res.json();
             render();
             msg("✅ បច្ចុប្បន្នភាពរួចរាល់", "var(--primary)");
-        } catch(e) { msg("❌ កំហុស API", "var(--danger)"); }
+        } catch(e) { msg("❌ Error API", "red"); }
     }
 
     function render() {
         const dBody = document.getElementById('depBody'), sBody = document.getElementById('salBody');
         dBody.innerHTML = sBody.innerHTML = "";
-        
         state.store.forEach(item => {
             const row = `<tr>
-                <td style="white-space:nowrap">${item.date}</td>
+                <td>${item.date}</td>
                 <td><b>${item.agent}</b></td>
                 ${item.recordType === 'Deposit' ? 
-                `<td>$${item.cash}</td><td>$${item.credit}</td><td><small>${item.remark || ''}</small></td>` : 
+                `<td>$${item.cash}</td><td>$${item.credit}</td><td><small>${item.remark}</small></td>` : 
                 `<td>${item.gross}/${item.sim}/${item.home}/${item.fiber}</td><td>${item.topup}/${item.shop}/${item.dealer}</td><td><b style="color:var(--primary)">$${item.totalRev}</b></td>`}
-                <td style="white-space:nowrap">
-                    <button class="icon-btn edit-btn" onclick="startEdit('${item.recordType}', ${item.rowIndex})"><i class="fa-solid fa-pen-to-square"></i></button>
-                    <button class="icon-btn del-btn" onclick="del('${item.recordType}', ${item.rowIndex})"><i class="fa-solid fa-trash-can"></i></button>
+                <td>
+                    <button class="icon-btn edit-btn" onclick="startEdit('${item.recordType}', ${item.rowIndex})"><i class="fa-solid fa-pen"></i></button>
+                    <button class="icon-btn del-btn" onclick="del('${item.recordType}', ${item.rowIndex})"><i class="fa-solid fa-trash"></i></button>
                 </td></tr>`;
             item.recordType === "Deposit" ? dBody.innerHTML += row : sBody.innerHTML += row;
         });
@@ -168,7 +167,6 @@
             document.getElementById('dCash').value = item.cash;
             document.getElementById('dCredit').value = item.credit;
             document.getElementById('dRemark').value = item.remark;
-            document.getElementById('btnSaveDep').innerHTML = `<i class="fa-solid fa-sync"></i> ធ្វើបច្ចុប្បន្នភាព`;
         } else {
             document.getElementById('sDate').value = item.date;
             document.getElementById('sAgent').value = item.agent;
@@ -176,7 +174,6 @@
             document.getElementById('uHome').value = item.home; document.getElementById('uFiber').value = item.fiber;
             document.getElementById('rTopup').value = item.topup; document.getElementById('rShop').value = item.shop;
             document.getElementById('rDealer').value = item.dealer; document.getElementById('rTotal').value = item.totalRev;
-            document.getElementById('btnSaveSal').innerHTML = `<i class="fa-solid fa-sync"></i> ធ្វើបច្ចុប្បន្នភាព`;
         }
         window.scrollTo({top: 0, behavior: 'smooth'});
     }
@@ -184,22 +181,17 @@
     async function save(type) {
         let dateVal = (type === 'Deposit') ? document.getElementById('dDate').value : document.getElementById('sDate').value;
         const obj = { recordType: type, action: state.isEdit ? "UPDATE" : "ADD", rowIndex: state.editIdx, date: dateVal };
-        
         if(type === 'Deposit') {
-            obj.agent = document.getElementById('dAgent').value;
-            obj.cash = document.getElementById('dCash').value;
-            obj.credit = document.getElementById('dCredit').value;
-            obj.remark = document.getElementById('dRemark').value;
+            obj.agent = document.getElementById('dAgent').value; obj.cash = document.getElementById('dCash').value;
+            obj.credit = document.getElementById('dCredit').value; obj.remark = document.getElementById('dRemark').value;
         } else {
-            obj.agent = document.getElementById('sAgent').value;
-            obj.gross = document.getElementById('uAds').value; obj.sim = document.getElementById('uSim').value;
-            obj.home = document.getElementById('uHome').value; obj.fiber = document.getElementById('uFiber').value;
-            obj.topup = document.getElementById('rTopup').value; obj.shop = document.getElementById('rShop').value;
-            obj.dealer = document.getElementById('rDealer').value; obj.totalRev = document.getElementById('rTotal').value;
+            obj.agent = document.getElementById('sAgent').value; obj.gross = document.getElementById('uAds').value;
+            obj.sim = document.getElementById('uSim').value; obj.home = document.getElementById('uHome').value;
+            obj.fiber = document.getElementById('uFiber').value; obj.topup = document.getElementById('rTopup').value;
+            obj.shop = document.getElementById('rShop').value; obj.dealer = document.getElementById('rDealer').value;
+            obj.totalRev = document.getElementById('rTotal').value;
         }
-        
-        if(!obj.date || !obj.agent) return alert("សូមបំពេញថ្ងៃខែ និងឈ្មោះភ្នាក់ងារ!");
-        
+        if(!obj.date || !obj.agent) return alert("សូមបំពេញថ្ងៃខែ និងភ្នាក់ងារ!");
         msg("🔄 កំពុងរក្សាទុក...", "var(--warning)");
         await fetch(API, { method: "POST", body: JSON.stringify(obj) });
         resetForm(); load();
@@ -215,8 +207,6 @@
     function resetForm() {
         state.isEdit = false; state.editIdx = null;
         document.querySelectorAll('input').forEach(i => i.type !== 'date' ? i.value = (i.type === 'number' ? 0 : "") : null);
-        document.getElementById('btnSaveDep').innerHTML = `<i class="fa-solid fa-floppy-disk"></i> រក្សាទុកទិន្នន័យ`;
-        document.getElementById('btnSaveSal').innerHTML = `<i class="fa-solid fa-check-double"></i> រក្សាទុកការលក់`;
     }
 
     function msg(t, c) { const s = document.getElementById('status'); s.style.display="block"; s.innerText = t; s.style.background = c + "15"; s.style.color = c; }
