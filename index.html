@@ -10,26 +10,37 @@
         :root { 
             --primary: #1EA647; --bg: #f4f7f6; --text-main: #2c3e50;
             --font-khmer: 'Kantumruy Pro', sans-serif;
-            --danger: #ef4444; --warning: #f59e0b;
+            --danger: #ef4444; --warning: #f59e0b; --blue: #1a73e8;
         }
 
         body { font-family: var(--font-khmer); margin: 0; display: flex; background: var(--bg); color: var(--text-main); }
-        .sidebar { width: 260px; background: white; height: 100vh; border-right: 1px solid #e0e0e0; padding: 30px 20px; position: fixed; }
+        .sidebar { width: 260px; background: white; height: 100vh; border-right: 1px solid #e0e0e0; padding: 30px 20px; position: fixed; z-index: 100; }
         .sidebar h2 { font-size: 20px; font-weight: 700; color: var(--primary); text-align: center; border-bottom: 2px solid #f0f0f0; padding-bottom: 20px; }
         .main { margin-left: 300px; padding: 40px; flex: 1; }
 
         .nav-btn { width: 100%; padding: 14px; margin-bottom: 12px; border: none; background: #f8f9fa; border-radius: 12px; cursor: pointer; text-align: left; font-weight: 600; font-family: var(--font-khmer); transition: 0.3s; }
         .nav-btn.active { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(30, 166, 71, 0.2); }
 
-        .card { background: white; padding: 25px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); margin-bottom: 30px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 15px; }
-        .label-blue { color: #1a73e8; font-weight: 700; margin-bottom: 10px; display: block; border-left: 4px solid #1a73e8; padding-left: 10px; }
-        input { width: 100%; padding: 12px; border: 1.5px solid #dee2e6; border-radius: 10px; font-family: var(--font-khmer); }
-        input:focus { border-color: var(--primary); outline: none; }
-        .btn-save { background: var(--primary); color: white; border: none; padding: 16px; border-radius: 12px; width: 100%; cursor: pointer; font-weight: 700; font-family: var(--font-khmer); margin-top: 10px; }
+        .card { background: white; padding: 25px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); margin-bottom: 30px; border: 1px solid rgba(0,0,0,0.05); }
+        h3 { font-size: 18px; font-weight: 700; color: var(--blue); margin-top: 0; }
 
-        /* Action Buttons */
-        .action-cell { display: flex; gap: 8px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 15px; }
+        .label-section { color: var(--blue); font-weight: 700; margin-bottom: 10px; display: block; border-left: 4px solid var(--blue); padding-left: 10px; font-size: 14px; }
+        
+        label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; color: #6c757d; }
+        input { width: 100%; padding: 12px; border: 1.5px solid #dee2e6; border-radius: 10px; font-family: var(--font-khmer); font-size: 14px; box-sizing: border-box; }
+        input:focus { border-color: var(--primary); outline: none; background: #fdfdfd; }
+        
+        .btn-save { background: var(--primary); color: white; border: none; padding: 16px; border-radius: 12px; width: 100%; cursor: pointer; font-weight: 700; font-family: var(--font-khmer); font-size: 16px; margin-top: 10px; transition: 0.3s; }
+        .btn-save:hover { opacity: 0.9; transform: translateY(-1px); }
+        .btn-cancel { background: #6c757d; margin-top: 5px; }
+
+        /* Table & Action Buttons */
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th { background: #f8f9fa; padding: 12px; text-align: left; font-size: 12px; color: #6c757d; border-bottom: 2px solid #edf2f7; }
+        td { padding: 12px; border-bottom: 1px solid #f1f3f5; font-size: 13px; }
+        
+        .action-cell { display: flex; gap: 10px; }
         .icon-btn { border: none; background: none; cursor: pointer; padding: 6px; border-radius: 8px; transition: 0.2s; display: flex; align-items: center; }
         .icon-btn.edit:hover { background: #fef3c7; }
         .icon-btn.delete:hover { background: #fee2e2; }
@@ -37,14 +48,8 @@
         .icon-edit { stroke: var(--warning); }
         .icon-delete { stroke: var(--danger); }
 
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th { background: #f8f9fa; padding: 12px; text-align: left; font-size: 12px; color: #6c757d; border-bottom: 2px solid #edf2f7; }
-        td { padding: 12px; border-bottom: 1px solid #f1f3f5; font-size: 13px; }
+        #status { font-weight: 600; font-size: 14px; margin-bottom: 15px; min-height: 22px; padding: 8px; border-radius: 8px; }
         .hidden { display: none; }
-        #status { font-weight: 600; font-size: 14px; margin-bottom: 15px; min-height: 20px; }
-        
-        /* Highlight row when editing */
-        .editing { background-color: #fff9db !important; }
     </style>
 </head>
 <body>
@@ -68,15 +73,18 @@
                 <div><label>Credit ($)</label><input type="number" id="dCredit" value="0" step="0.01"></div>
             </div>
             <label>ចំណាំ (Remark)</label>
-            <input type="text" id="dRemark" placeholder="..." style="margin-top:5px; margin-bottom:15px;">
+            <input type="text" id="dRemark" placeholder="បញ្ជាក់បន្ថែម..." style="margin-bottom:15px;">
             <button class="btn-save" id="btnSaveDep" onclick="save('Deposit')">រក្សាទុកទិន្នន័យ</button>
+            <button class="btn-save btn-cancel hidden" id="btnCancelDep" onclick="cancelEdit()">បោះបង់ការកែសម្រួល</button>
         </div>
         <div class="card">
             <h3>📜 ប្រវត្តិប្រតិបត្តិការ</h3>
-            <table>
-                <thead><tr><th>ថ្ងៃទី</th><th>ភ្នាក់ងារ</th><th>សាច់ប្រាក់</th><th>ជំពាក់</th><th>ចំណាំ</th><th>Action</th></tr></thead>
-                <tbody id="depBody"></tbody>
-            </table>
+            <div style="overflow-x:auto;">
+                <table>
+                    <thead><tr><th>ថ្ងៃទី</th><th>ភ្នាក់ងារ</th><th>Cash</th><th>Credit</th><th>ចំណាំ</th><th>Action</th></tr></thead>
+                    <tbody id="depBody"></tbody>
+                </table>
+            </div>
         </div>
     </div>
 
@@ -85,30 +93,36 @@
             <h3 id="salTitle">🛒 បញ្ចូលព័ត៌មានលក់</h3>
             <div class="grid">
                 <div><label>ថ្ងៃខែ</label><input type="date" id="sDate"></div>
-                <div><label>ភ្នាក់ងារ</label><input type="text" id="sAgent" placeholder="ឈ្មោះបុគ្គលិក"></div>
+                <div><label>ភ្នាក់ងារលក់</label><input type="text" id="sAgent" placeholder="ឈ្មោះបុគ្គលិក"></div>
             </div>
-            <span class="label-blue">📉 ចំនួនលក់ (Units)</span>
+            
+            <span class="label-section">📉 ចំនួនលក់ (Units)</span>
             <div class="grid">
                 <div><label>Ads</label><input type="number" id="uAds" value="0"></div>
                 <div><label>Sim</label><input type="number" id="uSim" value="0"></div>
                 <div><label>Home</label><input type="number" id="uHome" value="0"></div>
                 <div><label>Fiber</label><input type="number" id="uFiber" value="0"></div>
             </div>
-            <span class="label-blue">💰 តម្លៃលក់សរុប (Revenue $)</span>
+
+            <span class="label-section">💰 តម្លៃលក់ ($)</span>
             <div class="grid">
-                <div><label>TopUp ($)</label><input type="number" id="rTopup" value="0"></div>
-                <div><label>Shop ($)</label><input type="number" id="rShop" value="0"></div>
-                <div><label>Dealer ($)</label><input type="number" id="rDealer" value="0"></div>
-                <div><label>សរុបរួម ($)</label><input type="number" id="rTotal" value="0" style="font-weight:700; color:var(--primary);"></div>
+                <div><label>TopUp ($)</label><input type="number" id="rTopup" value="0" step="0.01" class="sum-input"></div>
+                <div><label>SC Shop ($)</label><input type="number" id="rShop" value="0" step="0.01" class="sum-input"></div>
+                <div><label>SC Dealer ($)</label><input type="number" id="rDealer" value="0" step="0.01" class="sum-input"></div>
+                <div><label>សរុបរួម ($)</label><input type="number" id="rTotal" value="0" step="0.01" style="font-weight:700; color:var(--primary); background:#f0fdf4;" readonly></div>
             </div>
+            
             <button class="btn-save" id="btnSaveSal" onclick="save('Sales')">រក្សាទុកការលក់</button>
+            <button class="btn-save btn-cancel hidden" id="btnCancelSal" onclick="cancelEdit()">បោះបង់ការកែសម្រួល</button>
         </div>
         <div class="card">
             <h3>📜 ប្រវត្តិការលក់</h3>
-            <table>
-                <thead><tr><th>ថ្ងៃទី</th><th>ភ្នាក់ងារ</th><th>A/S/H/F</th><th>TopUp/Shop/Dealer</th><th>សរុប $</th><th>Action</th></tr></thead>
-                <tbody id="salBody"></tbody>
-            </table>
+            <div style="overflow-x:auto;">
+                <table>
+                    <thead><tr><th>ថ្ងៃទី</th><th>ភ្នាក់ងារ</th><th>A/S/H/F</th><th>T/S/D ($)</th><th>សរុប $</th><th>Action</th></tr></thead>
+                    <tbody id="salBody"></tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
@@ -124,17 +138,17 @@
         document.getElementById('salesTab').classList.toggle('hidden', t !== 'sales');
         document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        cancelEdit(); // Reset editing mode when switching tabs
+        if(!isEditing) cancelEdit();
     }
 
     async function load() {
-        msg("⏳ កំពុងទាញទិន្នន័យ...", "#1a73e8");
+        msg("⏳ កំពុងទាញទិន្នន័យពី Google Sheets...", varColor('--blue'));
         try {
             const res = await fetch(API);
             store = await res.json();
             render();
-            msg("✅ បច្ចុប្បន្នភាពរួចរាល់", "var(--primary)");
-        } catch (e) { msg("❌ Error Loading Data", "var(--danger)"); }
+            msg("✅ ទិន្នន័យបច្ចុប្បន្នភាពចុងក្រោយ", varColor('--primary'));
+        } catch (e) { msg("❌ មិនអាចភ្ជាប់ទៅកាន់ Server", varColor('--danger')); }
     }
 
     function render() {
@@ -153,7 +167,7 @@
             if (item.recordType === "Deposit") {
                 db.innerHTML += `<tr><td>${item.date.split('T')[0]}</td><td>${item.agent}</td><td>$${item.cash}</td><td>$${item.credit}</td><td>${item.remark || '-'}</td><td>${actions}</td></tr>`;
             } else {
-                sb.innerHTML += `<tr><td>${item.date.split('T')[0]}</td><td>${item.agent}</td><td>${item.gross}/${item.sim}/${item.home}/${item.fiber}</td><td>$${item.topup || 0}/$${item.shop || 0}/$${item.dealer || 0}</td><td>$${item.totalRev}</td><td>${actions}</td></tr>`;
+                sb.innerHTML += `<tr><td>${item.date.split('T')[0]}</td><td>${item.agent}</td><td>${item.gross}/${item.sim}/${item.home}/${item.fiber}</td><td>${item.topup}/${item.shop}/${item.dealer}</td><td style="font-weight:700; color:var(--primary)">$${item.totalRev}</td><td>${actions}</td></tr>`;
             }
         });
     }
@@ -164,7 +178,6 @@
 
         isEditing = true;
         editRowIndex = index;
-        msg("✍️ កំពុងកែសម្រួលទិន្នន័យ...", "var(--warning)");
 
         if (type === "Deposit") {
             showTab('deposit', document.getElementById('btnDep'));
@@ -173,8 +186,9 @@
             document.getElementById('dCash').value = item.cash;
             document.getElementById('dCredit').value = item.credit;
             document.getElementById('dRemark').value = item.remark || "";
-            document.getElementById('btnSaveDep').innerText = "ធ្វើបច្ចុប្បន្នភាព (Update)";
-            document.getElementById('depTitle').innerText = "📝 កែសម្រួលការដាក់ប្រាក់";
+            document.getElementById('btnSaveDep').innerText = "ធ្វើបច្ចុប្បន្នភាព (Update Row " + index + ")";
+            document.getElementById('btnCancelDep').classList.remove('hidden');
+            document.getElementById('depTitle').innerText = "📝 កែសម្រួលព័ត៌មានដាក់ប្រាក់";
         } else {
             showTab('sales', document.getElementById('btnSal'));
             document.getElementById('sDate').value = item.date.split('T')[0];
@@ -187,32 +201,34 @@
             document.getElementById('rShop').value = item.shop;
             document.getElementById('rDealer').value = item.dealer;
             document.getElementById('rTotal').value = item.totalRev;
-            document.getElementById('btnSaveSal').innerText = "ធ្វើបច្ចុប្បន្នភាព (Update)";
-            document.getElementById('salTitle').innerText = "📝 កែសម្រួលការលក់";
+            document.getElementById('btnSaveSal').innerText = "ធ្វើបច្ចុប្បន្នភាព (Update Row " + index + ")";
+            document.getElementById('btnCancelSal').classList.remove('hidden');
+            document.getElementById('salTitle').innerText = "📝 កែសម្រួលព័ត៌មានលក់";
         }
         window.scrollTo({ top: 0, behavior: 'smooth' });
+        msg("✍️ កំពុងកែសម្រួលទិន្នន័យជួរទី " + index, varColor('--warning'));
     }
 
     function cancelEdit() {
         isEditing = false;
         editRowIndex = null;
+        document.querySelectorAll('.btn-cancel').forEach(b => b.classList.add('hidden'));
         document.getElementById('btnSaveDep').innerText = "រក្សាទុកទិន្នន័យ";
         document.getElementById('btnSaveSal').innerText = "រក្សាទុកការលក់";
         document.getElementById('depTitle').innerText = "💰 បញ្ចូលព័ត៌មានដាក់ប្រាក់";
         document.getElementById('salTitle').innerText = "🛒 បញ្ចូលព័ត៌មានលក់";
         clearForm();
+        msg("✅ បានបោះបង់ការកែសម្រួល", varColor('--primary'));
     }
 
     async function save(type) {
-        let obj = { formType: type, timestamp: new Date().toISOString() };
-        
-        // ប្រសិនបើកំពុង Edit យើងត្រូវប្រាប់ API ឱ្យ Delete ជួរចាស់សិន រួចសឹម Add ថ្មី
-        if (isEditing) {
-            msg("🔄 កំពុងធ្វើបច្ចុប្បន្នភាព...", "var(--warning)");
-            await fetch(API, { method: "POST", body: JSON.stringify({ action: "DELETE", recordType: type, rowIndex: editRowIndex }) });
-        } else {
-            msg("⏳ កំពុងរក្សាទុក...", "#1a73e8");
-        }
+        let obj = { 
+            formType: type, 
+            timestamp: new Date().toISOString(),
+            action: isEditing ? "UPDATE" : "ADD",
+            recordType: type,
+            rowIndex: editRowIndex
+        };
 
         if(type === 'Deposit') {
             obj.date = document.getElementById('dDate').value;
@@ -233,19 +249,38 @@
             obj.totalRev = document.getElementById('rTotal').value;
         }
 
-        await fetch(API, { method: "POST", body: JSON.stringify(obj) });
-        cancelEdit();
-        load();
+        if (!obj.date || !obj.agent) return alert("សូមបំពេញកាលបរិច្ឆេទ និងឈ្មោះភ្នាក់ងារ!");
+
+        msg(isEditing ? "🔄 កំពុងធ្វើបច្ចុប្បន្នភាព..." : "⏳ កំពុងរក្សាទុក...", varColor('--warning'));
+        
+        try {
+            await fetch(API, { method: "POST", body: JSON.stringify(obj) });
+            cancelEdit();
+            load();
+        } catch (e) { msg("❌ បរាជ័យក្នុងការតភ្ជាប់!", varColor('--danger')); }
     }
 
     async function del(type, index) {
-        if (!confirm("តើអ្នកចង់លុបទិន្នន័យនេះមែនទេ?")) return;
-        msg("🗑 កំពុងលុប...", "var(--danger)");
-        await fetch(API, { method: "POST", body: JSON.stringify({ action: "DELETE", recordType: type, rowIndex: index }) });
-        load();
+        if (!confirm("តើអ្នកពិតជាចង់លុបទិន្នន័យជួរទី " + index + " នេះមែនទេ?")) return;
+        msg("🗑 កំពុងលុបទិន្នន័យ...", varColor('--danger'));
+        try {
+            await fetch(API, { method: "POST", body: JSON.stringify({ action: "DELETE", recordType: type, rowIndex: index }) });
+            load();
+        } catch (e) { msg("❌ មិនអាចលុបបានទេ!", "red"); }
     }
 
-    function msg(t, c) { const s = document.getElementById('status'); s.innerText = t; s.style.color = c; }
+    // Auto-sum logic
+    document.querySelectorAll('.sum-input').forEach(input => {
+        input.addEventListener('input', () => {
+            const topup = parseFloat(document.getElementById('rTopup').value) || 0;
+            const shop = parseFloat(document.getElementById('rShop').value) || 0;
+            const dealer = parseFloat(document.getElementById('rDealer').value) || 0;
+            document.getElementById('rTotal').value = (topup + shop + dealer).toFixed(2);
+        });
+    });
+
+    function msg(t, c) { const s = document.getElementById('status'); s.innerText = t; s.style.backgroundColor = c + '15'; s.style.color = c; }
+    function varColor(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
     
     function clearForm() {
         document.querySelectorAll('input[type="text"], input[type="number"]').forEach(i => i.value = i.type === 'number' ? 0 : "");
