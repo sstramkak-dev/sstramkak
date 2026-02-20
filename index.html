@@ -8,31 +8,21 @@
     <style>
         :root { --primary-green: #1EA647; --hover-green: #168a39; --bg-gray: #f8fafc; --text-main: #1e293b; --text-light: #64748b; }
         body { margin: 0; font-family: 'Kantumruy Pro', sans-serif; display: flex; height: 100vh; background-color: var(--bg-gray); }
-        
-        /* Sidebar */
         .sidebar { width: 260px; background: white; border-right: 1px solid #e2e8f0; padding: 30px 15px; display: flex; flex-direction: column; }
-        .sidebar-title { color: var(--primary-green); font-size: 20px; font-weight: 700; text-align: center; margin-bottom: 30px; line-height: 1.4; }
+        .sidebar-title { color: var(--primary-green); font-size: 20px; font-weight: 700; text-align: center; margin-bottom: 30px; }
         .nav-btn { background: none; border: none; padding: 14px; text-align: left; font-size: 15px; font-weight: 600; cursor: pointer; border-radius: 10px; margin-bottom: 8px; color: var(--text-light); transition: 0.2s; font-family: inherit; }
         .nav-btn.active { background-color: var(--primary-green); color: white; }
-
-        /* Main Content */
         .main-content { flex-grow: 1; padding: 30px; overflow-y: auto; }
-        .card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px; border: 1px solid #f1f5f9; }
+        .card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px; }
         .grid-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 15px; }
-        
-        label { display: block; font-size: 12px; font-weight: 700; margin-bottom: 5px; color: var(--text-main); }
-        input { width: 100%; padding: 10px; border: 1.5px solid #e2e8f0; border-radius: 8px; box-sizing: border-box; font-family: inherit; font-size: 14px; }
+        label { display: block; font-size: 12px; font-weight: 700; margin-bottom: 5px; }
+        input { width: 100%; padding: 10px; border: 1.5px solid #e2e8f0; border-radius: 8px; box-sizing: border-box; font-family: inherit; }
         .section-title { font-size: 16px; font-weight: 700; color: var(--primary-green); margin-bottom: 15px; border-left: 4px solid var(--primary-green); padding-left: 10px; }
-        
-        .submit-btn { background: var(--primary-green); color: white; border: none; padding: 12px; border-radius: 10px; cursor: pointer; width: 100%; font-weight: 700; font-family: inherit; margin-top: 10px; }
-        
-        /* Table */
+        .submit-btn { background: var(--primary-green); color: white; border: none; padding: 12px; border-radius: 10px; cursor: pointer; width: 100%; font-weight: 700; margin-top: 10px; font-family: inherit;}
         table { width: 100%; border-collapse: collapse; font-size: 13px; }
-        th { text-align: left; padding: 10px; background: #f8fafc; color: var(--text-light); border-bottom: 2px solid #edf2f7; }
+        th { text-align: left; padding: 10px; background: #f8fafc; border-bottom: 2px solid #edf2f7; }
         td { padding: 10px; border-bottom: 1px solid #f1f5f9; }
-        .btn-icon { border: none; background: #f1f5f9; cursor: pointer; padding: 6px; border-radius: 6px; margin-left: 4px; }
-        .btn-edit { color: #2563eb; } .btn-delete { color: #dc2626; }
-        
+        .btn-icon { border: none; background: #f1f5f9; cursor: pointer; padding: 6px; border-radius: 6px; }
         .hidden { display: none; }
     </style>
 </head>
@@ -45,7 +35,7 @@
     </nav>
 
     <main class="main-content">
-        <p id="status" style="text-align:right; font-weight:bold; color:var(--primary-green);"></p>
+        <div id="status" style="text-align:center; font-weight:bold; height: 20px;"></div>
 
         <div id="depositTab">
             <div class="card">
@@ -57,9 +47,8 @@
                     <div><label>Credit ($)</label><input type="number" id="depCredit"></div>
                 </div>
                 <label>ចំណាំ</label><input type="text" id="depRemark">
-                <button class="submit-btn" onclick="saveData('Deposit')">រក្សាទុកការដាក់ប្រាក់</button>
+                <button class="submit-btn" id="saveDepBtn" onclick="saveData('Deposit')">រក្សាទុកការដាក់ប្រាក់</button>
             </div>
-
             <div class="card">
                 <div class="section-title">ប្រវត្តិដាក់ប្រាក់</div>
                 <table>
@@ -76,35 +65,26 @@
                     <div><label>កាលបរិច្ឆេទ</label><input type="date" id="salDate"></div>
                     <div><label>ភ្នាក់ងារ</label><input type="text" id="salAgent"></div>
                 </div>
-                
-                <label style="color: blue; margin-top: 10px;">📉 គិតជាឯកតា (Unit)</label>
                 <div class="grid-form">
                     <div><label>Gross Ads</label><input type="number" id="unitGross" value="0"></div>
                     <div><label>Change SIM</label><input type="number" id="unitSim" value="0"></div>
                     <div><label>Smart@Home</label><input type="number" id="unitHome" value="0"></div>
                     <div><label>Smart Fiber+</label><input type="number" id="unitFiber" value="0"></div>
                 </div>
-
-                <label style="color: blue; margin-top: 10px;">💰 គិតជាទឹកប្រាក់ (Revenue $)</label>
                 <div class="grid-form">
-                    <div><label>Top Up</label><input type="number" id="revTopup" value="0"></div>
-                    <div><label>SC Shop</label><input type="number" id="revShop" value="0"></div>
-                    <div><label>SC Dealer</label><input type="number" id="revDealer" value="0"></div>
-                    <div><label>Total Revenue</label><input type="number" id="revTotal" value="0"></div>
+                    <div><label>Top Up ($)</label><input type="number" id="revTopup" value="0"></div>
+                    <div><label>SC Shop ($)</label><input type="number" id="revShop" value="0"></div>
+                    <div><label>SC Dealer ($)</label><input type="number" id="revDealer" value="0"></div>
+                    <div><label>Total Rev ($)</label><input type="number" id="revTotal" value="0"></div>
                 </div>
-                <button class="submit-btn" onclick="saveData('Sales')">រក្សាទុកការលក់</button>
+                <button class="submit-btn" id="saveSalBtn" onclick="saveData('Sales')">រក្សាទុកការលក់</button>
             </div>
-
             <div class="card">
                 <div class="section-title">ប្រវត្តិការលក់</div>
-                <div style="overflow-x: auto;">
-                    <table>
-                        <thead>
-                            <tr><th>កាលបរិច្ឆេទ</th><th>ភ្នាក់ងារ</th><th>Ads/SIM</th><th>Home/Fiber</th><th>Total Rev</th><th>សកម្មភាព</th></tr>
-                        </thead>
-                        <tbody id="salTableBody"></tbody>
-                    </table>
-                </div>
+                <table>
+                    <thead><tr><th>កាលបរិច្ឆេទ</th><th>ភ្នាក់ងារ</th><th>Unit (A/S/H/F)</th><th>Total Rev</th><th>សកម្មភាព</th></tr></thead>
+                    <tbody id="salTableBody"></tbody>
+                </table>
             </div>
         </div>
     </main>
@@ -115,17 +95,24 @@
         let editingId = null;
 
         function showTab(tabId, btn) {
-            document.getElementById('depositTab').classList.add('hidden');
-            document.getElementById('salesTab').classList.add('hidden');
-            document.getElementById(tabId).classList.remove('hidden');
+            document.getElementById('depositTab').classList.toggle('hidden', tabId !== 'depositTab');
+            document.getElementById('salesTab').classList.toggle('hidden', tabId !== 'salesTab');
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
+            editingId = null;
+            clearForms();
         }
 
         async function loadData() {
-            const res = await fetch(WEB_APP_URL);
-            allData = await res.json();
-            renderTables();
+            document.getElementById('status').innerText = "⏳ កំពុងទាញទិន្នន័យ...";
+            try {
+                const res = await fetch(WEB_APP_URL);
+                allData = await res.json();
+                renderTables();
+                document.getElementById('status').innerText = "";
+            } catch (e) {
+                document.getElementById('status').innerText = "❌ បរាជ័យក្នុងការទាញទិន្នន័យ";
+            }
         }
 
         function renderTables() {
@@ -136,21 +123,21 @@
             allData.forEach(item => {
                 if (item.recordType === "Deposit") {
                     depBody.innerHTML += `<tr>
-                        <td>${item.date}</td><td>${item.agent}</td>
-                        <td>$${item.cash}</td><td>$${item.credit}</td>
+                        <td>${item.date || '-'}</td><td>${item.agent || '-'}</td>
+                        <td style="color:green">$${item.cash || 0}</td><td style="color:orange">$${item.credit || 0}</td>
                         <td>
-                            <button class="btn-icon btn-edit" onclick="editDeposit('${item.fileId}')">✎</button>
-                            <button class="btn-icon btn-delete" onclick="deleteItem('${item.fileId}')">🗑</button>
+                            <button class="btn-icon" style="color:blue" onclick="editDeposit('${item.fileId}')">✎</button>
+                            <button class="btn-icon" style="color:red" onclick="deleteItem('${item.fileId}')">🗑</button>
                         </td>
                     </tr>`;
-                } else {
+                } else if (item.recordType === "Sales") {
                     salBody.innerHTML += `<tr>
-                        <td>${item.date}</td><td>${item.agent}</td>
-                        <td>${item.gross}/${item.sim}</td><td>${item.home}/${item.fiber}</td>
-                        <td style="font-weight:bold; color:green">$${item.totalRev}</td>
+                        <td>${item.date || '-'}</td><td>${item.agent || '-'}</td>
+                        <td>${item.gross || 0}/${item.sim || 0}/${item.home || 0}/${item.fiber || 0}</td>
+                        <td style="font-weight:bold; color:green">$${item.totalRev || 0}</td>
                         <td>
-                            <button class="btn-icon btn-edit" onclick="editSales('${item.fileId}')">✎</button>
-                            <button class="btn-icon btn-delete" onclick="deleteItem('${item.fileId}')">🗑</button>
+                            <button class="btn-icon" style="color:blue" onclick="editSales('${item.fileId}')">✎</button>
+                            <button class="btn-icon" style="color:red" onclick="deleteItem('${item.fileId}')">🗑</button>
                         </td>
                     </tr>`;
                 }
@@ -159,6 +146,7 @@
 
         async function saveData(type) {
             let payload = { formType: type, timestamp: new Date().toISOString() };
+            
             if (type === "Deposit") {
                 payload.date = document.getElementById('depDate').value;
                 payload.agent = document.getElementById('depAgent').value;
@@ -178,18 +166,23 @@
                 payload.totalRev = document.getElementById('revTotal').value;
             }
 
-            if (editingId) {
-                payload = { action: "UPDATE", fileId: editingId, newData: payload };
-            }
-
+            const bodyPayload = editingId ? { action: "UPDATE", fileId: editingId, newData: payload } : payload;
+            
             document.getElementById('status').innerText = "⏳ កំពុងរក្សាទុក...";
-            await fetch(WEB_APP_URL, { method: "POST", mode: "no-cors", body: JSON.stringify(payload) });
-            editingId = null;
-            location.reload();
+            try {
+                await fetch(WEB_APP_URL, { method: "POST", mode: "no-cors", body: JSON.stringify(bodyPayload) });
+                document.getElementById('status').innerText = "✅ រក្សាទុករួចរាល់";
+                clearForms();
+                editingId = null;
+                setTimeout(loadData, 1500);
+            } catch (e) {
+                document.getElementById('status').innerText = "❌ រក្សាទុកមិនបានជោគជ័យ";
+            }
         }
 
         async function deleteItem(id) {
-            if (!confirm("លុបទិន្នន័យនេះ?")) return;
+            if (!confirm("តើអ្នកប្រាកដថាចង់លុបទិន្នន័យនេះ?")) return;
+            document.getElementById('status').innerText = "🗑 កំពុងលុប...";
             await fetch(WEB_APP_URL, { method: "POST", mode: "no-cors", body: JSON.stringify({ action: "DELETE", fileId: id }) });
             loadData();
         }
@@ -202,7 +195,7 @@
             document.getElementById('depCash').value = item.cash;
             document.getElementById('depCredit').value = item.credit;
             document.getElementById('depRemark').value = item.remark;
-            window.scrollTo(0,0);
+            document.getElementById('saveDepBtn').innerText = "ធ្វើបច្ចុប្បន្នភាព";
         }
 
         function editSales(id) {
@@ -219,15 +212,21 @@
             document.getElementById('revShop').value = item.shop;
             document.getElementById('revDealer').value = item.dealer;
             document.getElementById('revTotal').value = item.totalRev;
-            window.scrollTo(0,0);
+            document.getElementById('saveSalBtn').innerText = "ធ្វើបច្ចុប្បន្នភាព";
         }
 
-        window.onload = () => {
+        function clearForms() {
             const today = new Date().toISOString().split('T')[0];
-            document.getElementById('depDate').value = today;
-            document.getElementById('salDate').value = today;
-            loadData();
-        };
+            document.querySelectorAll('input').forEach(input => {
+                if(input.type === 'number') input.value = "0";
+                else if(input.type === 'date') input.value = today;
+                else input.value = "";
+            });
+            document.getElementById('saveDepBtn').innerText = "រក្សាទុកការដាក់ប្រាក់";
+            document.getElementById('saveSalBtn').innerText = "រក្សាទុកការលក់";
+        }
+
+        window.onload = loadData;
     </script>
 </body>
 </html>
