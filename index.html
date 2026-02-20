@@ -7,57 +7,54 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <title>ស្មាតសប អ៊េចប្រេស ត្រាំកក់</title>
     <style>
-        :root { --primary: #219E42; --primary-dark: #1a8235; --danger: #e74c3c; --warning: #f39c12; --bg: #f4f7f6; }
-        body { font-family: 'Kantumruy Pro', sans-serif; margin: 0; display: flex; background: var(--bg); min-height: 100vh; color: #333; }
+        :root { 
+            --primary: #219E42; 
+            --danger: #e74c3c; 
+            --warning: #f39c12; 
+            --bg: #f4f7f6; 
+            --unit-color: #1a73e8; /* ពណ៌ខៀវសម្រាប់ Unit */
+            --curr-color: #e67e22; /* ពណ៌ទឹកក្រូចសម្រាប់ Currency/Items */
+        }
+        body { font-family: 'Kantumruy Pro', sans-serif; margin: 0; display: flex; background: var(--bg); min-height: 100vh; }
         
         /* Sidebar */
-        .sidebar { width: 260px; background: var(--primary); height: 100vh; position: fixed; padding: 40px 15px; box-sizing: border-box; color: white; z-index: 100; }
-        .sidebar h2 { font-size: 19px; margin-bottom: 40px; font-weight: 700; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 15px; line-height: 1.5; }
-        .nav-btn { width: 100%; padding: 12px 15px; margin-bottom: 8px; border: none; background: transparent; border-radius: 10px; cursor: pointer; text-align: left; font-family: inherit; font-size: 15px; color: rgba(255,255,255,0.85); display: flex; align-items: center; gap: 12px; transition: 0.3s; }
-        .nav-btn.active { background: white; color: var(--primary); font-weight: 700; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .sidebar { width: 260px; background: var(--primary); height: 100vh; position: fixed; padding: 40px 15px; color: white; }
+        .sidebar h2 { font-size: 19px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 15px; }
+        .nav-btn { width: 100%; padding: 12px 15px; margin-bottom: 8px; border: none; background: transparent; border-radius: 10px; cursor: pointer; text-align: left; font-family: inherit; color: rgba(255,255,255,0.85); display: flex; align-items: center; gap: 12px; }
+        .nav-btn.active { background: white; color: var(--primary); font-weight: 700; }
 
         /* Main Content */
         .main { margin-left: 260px; padding: 30px; width: calc(100% - 260px); box-sizing: border-box; }
         
-        /* Summary Cards */
+        /* Summary */
         .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 30px; }
         .summary-card { background: white; padding: 22px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); display: flex; align-items: center; gap: 15px; }
-        .summary-icon { width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
-        .icon-blue { background: #eef5ff; color: #1a73e8; }
-        .icon-green { background: #e8f5e9; color: #219e42; }
-        .icon-orange { background: #fff8e1; color: #f39c12; }
-        .summary-info { flex: 1; }
-        .summary-info h4 { margin: 0; font-size: 13px; color: #777; font-weight: 500; }
-        .summary-info p { margin: 5px 0 0; font-size: 20px; font-weight: 700; color: #222; }
+        .summary-info h4 { margin: 0; font-size: 13px; color: #777; }
+        .summary-info p { margin: 5px 0 0; font-size: 20px; font-weight: 700; }
 
-        /* Growth Badge */
-        .growth-badge { font-size: 12px; padding: 3px 8px; border-radius: 20px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; margin-top: 5px; }
-        .badge-up { background: #e8f5e9; color: #219e42; }
-        .badge-down { background: #ffebee; color: #e74c3c; }
-        .badge-none { background: #f5f5f5; color: #999; }
-
-        /* Search Filter */
-        .filter-container { display: flex; gap: 10px; margin-bottom: 15px; }
-        .search-input { flex: 1; padding: 10px 15px; border: 1.5px solid #eee; border-radius: 10px; font-family: inherit; font-size: 14px; display: flex; align-items: center; gap: 10px; background: white; }
-        .search-input input { border: none; outline: none; width: 100%; font-family: inherit; }
-        .search-input i { color: #aaa; }
-
-        /* Form & Tables */
+        /* Form Styling */
         .card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 2px 15px rgba(0,0,0,0.05); margin-bottom: 25px; }
-        h3 { border-left: 5px solid var(--primary); padding-left: 12px; font-size: 17px; font-weight: 700; margin-top: 0; margin-bottom: 20px; }
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 15px; }
         .field { display: flex; flex-direction: column; }
-        .field label { font-size: 13px; margin-bottom: 6px; color: #666; font-weight: 600; }
-        input { padding: 10px 12px; border: 1.5px solid #eee; border-radius: 8px; font-family: inherit; font-size: 14px; }
-        .btn-save { background: var(--primary); color: white; border: none; padding: 10px 30px; border-radius: 8px; cursor: pointer; font-family: inherit; font-weight: 600; font-size: 15px; display: flex; align-items: center; gap: 8px; }
-        .table-container { overflow-x: auto; width: 100%; }
+        .field label { font-size: 13px; margin-bottom: 6px; font-weight: 600; }
+        
+        /* Input Colors */
+        input { padding: 10px 12px; border: 1.5px solid #eee; border-radius: 8px; font-family: inherit; }
+        .input-unit { border-color: var(--unit-color) !important; color: var(--unit-color); font-weight: 600; }
+        .input-curr { border-color: var(--curr-color) !important; color: var(--curr-color); font-weight: 600; }
+        .input-total { border-color: var(--primary) !important; color: var(--primary); font-weight: 700; font-size: 16px; }
+
+        /* Table Styling with Colors */
+        .table-container { overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; min-width: 800px; }
-        th { background: #f8faf9; padding: 12px; text-align: left; font-size: 12px; color: #777; border-bottom: 2px solid #edf2f0; }
+        th { background: #f8faf9; padding: 12px; text-align: left; font-size: 12px; color: #777; }
         td { padding: 12px; border-bottom: 1px solid #f0f0f0; font-size: 14px; }
-        .icon-btn { width: 30px; height: 30px; border: none; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
-        .edit-btn { background: #fff9db; color: var(--warning); margin-right: 5px; }
-        .del-btn { background: #fff5f5; color: var(--danger); }
-        #status { padding: 10px; border-radius: 8px; margin-bottom: 15px; font-weight: 600; display: none; text-align: center; }
+        
+        .col-unit { color: var(--unit-color); font-weight: 600; }
+        .col-curr { color: var(--curr-color); font-weight: 600; }
+        .col-total { color: var(--primary); font-weight: 700; }
+
+        .btn-save { background: var(--primary); color: white; border: none; padding: 12px 30px; border-radius: 8px; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 8px; }
         .hidden { display: none; }
     </style>
 </head>
@@ -74,31 +71,19 @@
 
     <div class="summary-grid">
         <div class="summary-card">
-            <div class="summary-icon icon-green"><i class="fa-solid fa-chart-line"></i></div>
-            <div class="summary-info">
-                <h4>ស្ថានភាពលក់ (Growth)</h4>
-                <div id="salesGrowth">0%</div>
-            </div>
+            <div class="summary-info"><h4>ស្ថានភាពលក់ (Growth)</h4><div id="salesGrowth">0%</div></div>
         </div>
         <div class="summary-card">
-            <div class="summary-icon icon-blue"><i class="fa-solid fa-hand-holding-dollar"></i></div>
-            <div class="summary-info">
-                <h4>សរុបការលក់ខែនេះ</h4>
-                <p id="sumSales">$0.00</p>
-            </div>
+            <div class="summary-info"><h4>សរុបការលក់ខែនេះ</h4><p id="sumSales" style="color:var(--primary)">$0.00</p></div>
         </div>
         <div class="summary-card">
-            <div class="summary-icon icon-orange"><i class="fa-solid fa-sim-card"></i></div>
-            <div class="summary-info">
-                <h4>សរុប SIM ខែនេះ</h4>
-                <p id="sumSim">0</p>
-            </div>
+            <div class="summary-info"><h4>សរុប SIM ខែនេះ</h4><p id="sumSim" style="color:var(--unit-color)">0</p></div>
         </div>
     </div>
 
     <div id="depositTab">
         <div class="card">
-            <h3>បញ្ចូលការដាក់ប្រាក់</h3>
+            <h3 style="color:var(--primary)">បញ្ចូលការដាក់ប្រាក់</h3>
             <div class="grid">
                 <div class="field"><label>ថ្ងៃខែឆ្នាំ</label><input type="date" id="dDate"></div>
                 <div class="field"><label>ភ្នាក់ងារ</label><input type="text" id="dAgent"></div>
@@ -106,48 +91,46 @@
                 <div class="field"><label>Credit ($)</label><input type="number" id="dCredit" value="0"></div>
             </div>
             <div class="field" style="margin-bottom: 15px;"><label>ចំណាំ</label><input type="text" id="dRemark"></div>
-            <div class="btn-container"><button class="btn-save" onclick="save('Deposit')"><i class="fa-solid fa-save"></i> រក្សាទុក</button></div>
-        </div>
-        <div class="card" style="padding:15px;">
-            <div class="filter-container">
-                <div class="search-input">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" id="searchDep" placeholder="ស្វែងរកតាមឈ្មោះភ្នាក់ងារ..." onkeyup="filterData('Deposit')">
-                </div>
-            </div>
-            <div class="table-container"><table><thead><tr><th>ថ្ងៃខែឆ្នាំ</th><th>ភ្នាក់ងារ</th><th>Cash</th><th>Credit</th><th>ចំណាំ</th><th>Action</th></tr></thead><tbody id="depBody"></tbody></table></div>
+            <button class="btn-save" onclick="save('Deposit')">រក្សាទុក</button>
         </div>
     </div>
 
     <div id="salesTab" class="hidden">
         <div class="card">
-            <h3>បញ្ចូលការលក់</h3>
+            <h3 style="color:var(--primary)">បញ្ចូលការលក់</h3>
             <div class="grid">
                 <div class="field"><label>ថ្ងៃខែឆ្នាំ</label><input type="date" id="sDate"></div>
                 <div class="field"><label>ភ្នាក់ងារ</label><input type="text" id="sAgent"></div>
-                <div class="field"><label>Ads/Gross</label><input type="number" id="uAds" value="0"></div>
-                <div class="field"><label>Sim</label><input type="number" id="uSim" value="0"></div>
+                <div class="field"><label style="color:var(--unit-color)">Ads/Gross</label><input type="number" id="uAds" class="input-unit" value="0"></div>
+                <div class="field"><label style="color:var(--unit-color)">Sim</label><input type="number" id="uSim" class="input-unit" value="0"></div>
             </div>
             <div class="grid">
-                <div class="field"><label>Home</label><input type="number" id="uHome" value="0"></div>
-                <div class="field"><label>Fiber</label><input type="number" id="uFiber" value="0"></div>
-                <div class="field"><label>Top Up</label><input type="number" id="rTopup" value="0"></div>
-                <div class="field"><label>SC Shop</label><input type="number" id="rShop" value="0"></div>
+                <div class="field"><label style="color:var(--unit-color)">Home</label><input type="number" id="uHome" class="input-unit" value="0"></div>
+                <div class="field"><label style="color:var(--unit-color)">Fiber</label><input type="number" id="uFiber" class="input-unit" value="0"></div>
+                <div class="field"><label style="color:var(--curr-color)">Top Up</label><input type="number" id="rTopup" class="input-curr" value="0"></div>
+                <div class="field"><label style="color:var(--curr-color)">SC Shop</label><input type="number" id="rShop" class="input-curr" value="0"></div>
             </div>
             <div class="grid">
-                <div class="field"><label>SC Dealer</label><input type="number" id="rDealer" value="0"></div>
-                <div class="field"><label>សរុប ($)</label><input type="number" id="rTotal" value="0" style="font-weight:700; color:var(--primary)" readonly></div>
+                <div class="field"><label style="color:var(--curr-color)">SC Dealer</label><input type="number" id="rDealer" class="input-curr" value="0"></div>
+                <div class="field"><label style="color:var(--primary)">សរុបការលក់ ($)</label><input type="number" id="rTotal" class="input-total" value="0"></div>
             </div>
-            <div class="btn-container"><button class="btn-save" onclick="save('Sales')"><i class="fa-solid fa-check-circle"></i> រក្សាទុក</button></div>
+            <button class="btn-save" onclick="save('Sales')">រក្សាទុក</button>
         </div>
-        <div class="card" style="padding:15px;">
-            <div class="filter-container">
-                <div class="search-input">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" id="searchSal" placeholder="ស្វែងរកតាមឈ្មោះភ្នាក់ងារ..." onkeyup="filterData('Sales')">
-                </div>
+        
+        <div class="card">
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ថ្ងៃខែ</th><th>ភ្នាក់ងារ</th>
+                            <th style="color:var(--unit-color)">Unit (A/S/H/F)</th>
+                            <th style="color:var(--curr-color)">Curr (T/S/D)</th>
+                            <th style="color:var(--primary)">សរុប $</th><th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="salBody"></tbody>
+                </table>
             </div>
-            <div class="table-container"><table><thead><tr><th>ថ្ងៃខែឆ្នាំ</th><th>ភ្នាក់ងារ</th><th>A/S/H/F</th><th>T/S/D</th><th>សរុប $</th><th>Action</th></tr></thead><tbody id="salBody"></tbody></table></div>
         </div>
     </div>
 </div>
@@ -155,17 +138,6 @@
 <script>
     const API = "https://script.google.com/macros/s/AKfycbz7JI01CifnNQ9vjOdaTET2YDTVkqgrS3fghDA98G0JKxhoo_235KFO0_HeR-puqz5ydA/exec";
     let state = { store: [], isEdit: false, editIdx: null };
-
-    // Auto calculate Sales Total
-    document.querySelectorAll('#salesTab input[type="number"]').forEach(input => {
-        if(input.id !== 'rTotal') {
-            input.addEventListener('input', () => {
-                const total = ['uAds','uSim','uHome','uFiber','rTopup','rShop','rDealer']
-                    .reduce((sum, id) => sum + parseFloat(document.getElementById(id).value || 0), 0);
-                document.getElementById('rTotal').value = total.toFixed(2);
-            });
-        }
-    });
 
     function showTab(t, b) {
         document.getElementById('depositTab').classList.toggle('hidden', t !== 'deposit');
@@ -176,133 +148,75 @@
     }
 
     async function load() {
-        msg("⏳ កំពុងទាញទិន្នន័យ...", "#1a73e8");
         try {
             const res = await fetch(API);
             state.store = await res.json();
             render();
             calculateSummary();
-            document.getElementById('status').style.display = "none"; 
-        } catch(e) { msg("❌ Error API", "red"); }
+        } catch(e) { console.error("Error loading data"); }
     }
 
     function calculateSummary() {
         const now = new Date();
-        const curM = now.getMonth(), curY = now.getFullYear(), curD = now.getDate();
-        let thisMTotal = 0, lastMTotal = 0, thisMSim = 0;
+        const curM = now.getMonth(), curY = now.getFullYear();
+        let totalRev = 0, totalSim = 0;
 
         state.store.forEach(item => {
             if (item.recordType === "Sales") {
                 const [y, m, d] = item.date.split('-').map(Number);
-                const itemDate = new Date(y, m-1, d);
-                const iM = itemDate.getMonth(), iY = itemDate.getFullYear(), iD = itemDate.getDate();
-
-                if (iM === curM && iY === curY && iD <= curD) {
-                    thisMTotal += parseFloat(item.totalRev || 0);
-                    thisMSim += parseFloat(item.sim || 0);
-                }
-                let lm = (curM === 0) ? 11 : curM - 1;
-                let ly = (curM === 0) ? curY - 1 : curY;
-                if (iM === lm && iY === ly && iD <= curD) {
-                    lastMTotal += parseFloat(item.totalRev || 0);
+                if ((m - 1) === curM && y === curY) {
+                    totalRev += parseFloat(item.totalRev || 0);
+                    totalSim += parseFloat(item.sim || 0);
                 }
             }
         });
-
-        let growthHTML = "";
-        if (lastMTotal > 0) {
-            let p = ((thisMTotal - lastMTotal) / lastMTotal) * 100;
-            let isUp = p >= 0;
-            growthHTML = `<div class="growth-badge ${isUp ? 'badge-up' : 'badge-down'}"><i class="fa-solid fa-caret-${isUp ? 'up' : 'down'}"></i> ${Math.abs(p).toFixed(1)}%</div>`;
-        } else {
-            growthHTML = `<div class="growth-badge badge-none">No Data</div>`;
-        }
-
-        document.getElementById('salesGrowth').innerHTML = growthHTML;
-        document.getElementById('sumSales').innerText = "$" + thisMTotal.toLocaleString(undefined, {minimumFractionDigits: 2});
-        document.getElementById('sumSim').innerText = thisMSim.toLocaleString();
+        document.getElementById('sumSales').innerText = "$" + totalRev.toFixed(2);
+        document.getElementById('sumSim').innerText = totalSim;
+        document.getElementById('salesGrowth').innerText = "Active"; // កែសម្រួលតាមតម្រូវការ
     }
 
     function render() {
-        const dBody = document.getElementById('depBody'), sBody = document.getElementById('salBody');
-        dBody.innerHTML = sBody.innerHTML = "";
+        const sBody = document.getElementById('salBody');
+        sBody.innerHTML = "";
         state.store.forEach(item => {
-            const row = `<tr>
-                <td style="font-weight:600; color:var(--primary)">${item.date}</td>
-                <td><b>${item.agent}</b></td>
-                ${item.recordType === 'Deposit' ? 
-                `<td>$${item.cash}</td><td>$${item.credit}</td><td><small>${item.remark}</small></td>` : 
-                `<td>${item.gross}/${item.sim}/${item.home}/${item.fiber}</td><td>${item.topup}/${item.shop}/${item.dealer}</td><td><b style="color:var(--primary)">$${item.totalRev}</b></td>`}
-                <td>
-                    <button class="icon-btn edit-btn" onclick="startEdit('${item.recordType}', ${item.rowIndex})"><i class="fa-solid fa-pen"></i></button>
-                    <button class="icon-btn del-btn" onclick="del('${item.recordType}', ${item.rowIndex})"><i class="fa-solid fa-trash"></i></button>
-                </td></tr>`;
-            item.recordType === "Deposit" ? dBody.innerHTML += row : sBody.innerHTML += row;
-        });
-    }
-
-    function filterData(type) {
-        const input = document.getElementById(type === 'Deposit' ? 'searchDep' : 'searchSal');
-        const filter = input.value.toLowerCase();
-        const tbody = document.getElementById(type === 'Deposit' ? 'depBody' : 'salBody');
-        const rows = tbody.getElementsByTagName('tr');
-        for (let i = 0; i < rows.length; i++) {
-            const agent = rows[i].getElementsByTagName('td')[1];
-            if (agent) {
-                const val = agent.textContent || agent.innerText;
-                rows[i].style.display = val.toLowerCase().indexOf(filter) > -1 ? "" : "none";
+            if (item.recordType === "Sales") {
+                sBody.innerHTML += `<tr>
+                    <td>${item.date}</td>
+                    <td><b>${item.agent}</b></td>
+                    <td class="col-unit">${item.gross}/${item.sim}/${item.home}/${item.fiber}</td>
+                    <td class="col-curr">${item.topup}/${item.shop}/${item.dealer}</td>
+                    <td class="col-total">$${parseFloat(item.totalRev).toFixed(2)}</td>
+                    <td><button onclick="del('Sales', ${item.rowIndex})">លុប</button></td>
+                </tr>`;
             }
-        }
+        });
     }
 
     async function save(type) {
         let d = (type === 'Deposit' ? document.getElementById('dDate').value : document.getElementById('sDate').value);
         let a = (type === 'Deposit' ? document.getElementById('dAgent').value : document.getElementById('sAgent').value);
-        if(!d || !a) return alert("សូមបំពេញថ្ងៃខែ និងភ្នាក់ងារ!");
-        const obj = { recordType: type, action: state.isEdit ? "UPDATE" : "ADD", rowIndex: state.editIdx, date: d, agent: a };
-        if(type === 'Deposit') {
-            obj.cash = document.getElementById('dCash').value; obj.credit = document.getElementById('dCredit').value; obj.remark = document.getElementById('dRemark').value;
-        } else {
+        const obj = { recordType: type, action: "ADD", date: d, agent: a };
+        
+        if(type === 'Sales') {
             obj.gross = document.getElementById('uAds').value; obj.sim = document.getElementById('uSim').value;
             obj.home = document.getElementById('uHome').value; obj.fiber = document.getElementById('uFiber').value;
             obj.topup = document.getElementById('rTopup').value; obj.shop = document.getElementById('rShop').value;
             obj.dealer = document.getElementById('rDealer').value; obj.totalRev = document.getElementById('rTotal').value;
-        }
-        msg("🔄 កំពុងរក្សាទុក...", "var(--warning)");
-        await fetch(API, { method: "POST", body: JSON.stringify(obj) });
-        resetForm(); load();
-    }
-
-    async function del(type, idx) {
-        if(!confirm("តើអ្នកចង់លុបទិន្នន័យនេះមែនទេ?")) return;
-        msg("🗑 កំពុងលុប...", "var(--danger)");
-        await fetch(API, { method: "POST", body: JSON.stringify({action: "DELETE", recordType: type, rowIndex: idx}) });
-        load();
-    }
-
-    function startEdit(type, idx) {
-        const item = state.store.find(i => i.recordType === type && i.rowIndex === idx);
-        state.isEdit = true; state.editIdx = idx;
-        if(type === 'Deposit') {
-            document.getElementById('dDate').value = item.date; document.getElementById('dAgent').value = item.agent;
-            document.getElementById('dCash').value = item.cash; document.getElementById('dCredit').value = item.credit;
-            document.getElementById('dRemark').value = item.remark;
         } else {
-            document.getElementById('sDate').value = item.date; document.getElementById('sAgent').value = item.agent;
-            document.getElementById('uAds').value = item.gross; document.getElementById('uSim').value = item.sim;
-            document.getElementById('uHome').value = item.home; document.getElementById('uFiber').value = item.fiber;
-            document.getElementById('rTopup').value = item.topup; document.getElementById('rShop').value = item.shop;
-            document.getElementById('rDealer').value = item.dealer; document.getElementById('rTotal').value = item.totalRev;
+            obj.cash = document.getElementById('dCash').value; obj.credit = document.getElementById('dCredit').value;
+            obj.remark = document.getElementById('dRemark').value;
         }
-        window.scrollTo({top: 0, behavior: 'smooth'});
+
+        await fetch(API, { method: "POST", body: JSON.stringify(obj) });
+        load();
+        resetForm();
     }
 
     function resetForm() {
-        state.isEdit = false; state.editIdx = null;
-        document.querySelectorAll('input').forEach(i => i.type !== 'date' ? i.value = (i.type === 'number' ? 0 : "") : null);
+        document.querySelectorAll('input[type="number"]').forEach(i => i.value = 0);
+        document.querySelectorAll('input[type="text"]').forEach(i => i.value = "");
     }
 
-    function msg(t, c) { const s = document.getElementById('status'); s.style.display="block"; s.innerText = t; s.style.background = c + "15"; s.style.color = c; }
     window.onload = load;
 </script>
 </body>
