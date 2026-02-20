@@ -9,14 +9,12 @@
         :root { --primary-green: #1EA647; --hover-green: #168a39; --bg-gray: #f8fafc; --text-main: #1e293b; --text-light: #64748b; }
         body { margin: 0; font-family: 'Kantumruy Pro', 'Inter', sans-serif; display: flex; height: 100vh; background-color: var(--bg-gray); color: var(--text-main); }
         
-        /* --- Sidebar --- */
         .sidebar { width: 280px; background: white; border-right: 1px solid #e2e8f0; padding: 40px 20px; display: flex; flex-direction: column; }
         .sidebar-title { color: var(--primary-green); font-size: 22px; font-weight: 700; margin-bottom: 40px; text-align: center; line-height: 1.4; border-bottom: 2px solid #f1f5f9; padding-bottom: 20px; }
         
         .nav-btn { background: none; border: none; padding: 14px 18px; text-align: left; font-size: 16px; font-weight: 600; cursor: pointer; border-radius: 12px; margin-bottom: 10px; color: var(--text-light); transition: 0.2s; font-family: inherit; }
         .nav-btn.active { background-color: var(--primary-green); color: white; box-shadow: 0 10px 15px -3px rgba(30, 166, 71, 0.3); }
 
-        /* --- Main Content --- */
         .main-content { flex-grow: 1; padding: 40px; overflow-y: auto; }
         .card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 25px; }
         .balance-card { background: linear-gradient(135deg, var(--primary-green), #15803d); color: white; max-width: 320px; }
@@ -24,23 +22,22 @@
         .balance-card h1 { margin: 5px 0 0; font-size: 32px; }
 
         .grid { display: flex; gap: 25px; flex-wrap: wrap; }
-        label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px; color: var(--text-main); }
-        input { width: 100%; padding: 12px; margin-bottom: 20px; border: 1.5px solid #e2e8f0; border-radius: 10px; box-sizing: border-box; font-family: inherit; font-size: 15px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px; color: var(--text-main); }
+        input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1.5px solid #e2e8f0; border-radius: 10px; box-sizing: border-box; font-family: inherit; font-size: 14px; }
         input:focus { outline: none; border-color: var(--primary-green); box-shadow: 0 0 0 3px rgba(30, 166, 71, 0.1); }
         
-        .submit-btn { background: var(--primary-green); color: white; border: none; padding: 16px; border-radius: 12px; cursor: pointer; width: 100%; font-weight: 700; font-size: 16px; font-family: inherit; transition: 0.2s; }
+        .submit-btn { background: var(--primary-green); color: white; border: none; padding: 16px; border-radius: 12px; cursor: pointer; width: 100%; font-weight: 700; font-size: 16px; font-family: inherit; transition: 0.2s; margin-top: 10px; }
         .submit-btn:hover { background: var(--hover-green); }
 
-        /* --- Table --- */
-        .table-container { flex: 2; min-width: 450px; }
+        .table-container { flex: 2; min-width: 500px; }
         table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; padding: 12px; color: var(--text-light); border-bottom: 2px solid #f1f5f9; font-size: 13px; text-transform: uppercase; }
-        td { padding: 15px 12px; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
+        th { text-align: left; padding: 12px; color: var(--text-light); border-bottom: 2px solid #f1f5f9; font-size: 12px; text-transform: uppercase; }
+        td { padding: 12px; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
         
         .btn-icon { border: none; background: #f1f5f9; cursor: pointer; font-size: 16px; padding: 8px; border-radius: 8px; margin-left: 5px; transition: 0.2s; }
         .btn-edit { color: #2563eb; }
         .btn-delete { color: #dc2626; }
-        .btn-icon:hover { background: #e2e8f0; }
     </style>
 </head>
 <body>
@@ -58,40 +55,55 @@
         </div>
 
         <div class="grid">
-            <div class="card" style="flex: 1; min-width: 320px; height: fit-content;">
-                <h1 id="formTitle" style="font-size: 20px; margin-bottom: 20px;">ការដាក់ប្រាក់ថ្មី</h1>
+            <div class="card" style="flex: 1; min-width: 350px; height: fit-content;">
+                <h1 id="formTitle" style="font-size: 18px; margin-bottom: 20px;">ការដាក់ប្រាក់ថ្មី</h1>
                 
-                <label>Cash ($)</label>
-                <input type="number" id="cashInput" placeholder="0.00">
-                
-                <label>Credit ($)</label>
-                <input type="number" id="creditInput" placeholder="0.00">
+                <div class="form-row">
+                    <div>
+                        <label>កាលបរិច្ឆេទ (Date)</label>
+                        <input type="date" id="inputDate">
+                    </div>
+                    <div>
+                        <label>ភ្នាក់ងារ (Agent Name)</label>
+                        <input type="text" id="agentName" placeholder="ឈ្មោះភ្នាក់ងារ">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div>
+                        <label>Cash ($)</label>
+                        <input type="number" id="cashInput" placeholder="0.00">
+                    </div>
+                    <div>
+                        <label>Credit ($)</label>
+                        <input type="number" id="creditInput" placeholder="0.00">
+                    </div>
+                </div>
                 
                 <label>ចំណាំ (Remark)</label>
-                <input type="text" id="remarkInput" placeholder="បញ្ជាក់ផ្សេងៗ...">
+                <input type="text" id="remarkInput" placeholder="...">
                 
                 <button class="submit-btn" id="saveBtn" onclick="sendToDrive()">រក្សាទុកទិន្នន័យ</button>
-                <p id="status" style="text-align:center; font-size:14px; margin-top:15px; font-weight:600;"></p>
+                <p id="status" style="text-align:center; font-size:14px; margin-top:10px; font-weight:600;"></p>
             </div>
 
             <div class="card table-container">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-                    <h1 style="font-size: 20px;">ប្រតិបត្តិការថ្មីៗ</h1>
+                    <h1 style="font-size: 18px;">ប្រតិបត្តិការថ្មីៗ</h1>
                     <input type="date" id="dateSearch" onchange="filterTransactions()" style="width:auto; margin:0; padding:8px;">
                 </div>
                 <table>
                     <thead>
                         <tr>
                             <th>កាលបរិច្ឆេទ</th>
+                            <th>ភ្នាក់ងារ</th>
                             <th>Cash</th>
                             <th>Credit</th>
                             <th>ចំណាំ</th>
                             <th style="text-align:right;">សកម្មភាព</th>
                         </tr>
                     </thead>
-                    <tbody id="tableBody">
-                        <tr><td colspan="5" style="text-align:center; padding:20px;">កំពុងផ្ទុក...</td></tr>
-                    </tbody>
+                    <tbody id="tableBody"></tbody>
                 </table>
             </div>
         </div>
@@ -102,6 +114,12 @@
         let allTransactions = [];
         let editingFileId = null;
 
+        // Set default date to today
+        window.onload = () => {
+            document.getElementById('inputDate').valueAsDate = new Date();
+            loadTransactions();
+        };
+
         async function loadTransactions() {
             try {
                 const response = await fetch(WEB_APP_URL);
@@ -109,7 +127,7 @@
                 allTransactions = Array.isArray(data) ? data : [];
                 renderTable(allTransactions);
             } catch (e) {
-                document.getElementById('tableBody').innerHTML = "<tr><td colspan='5' style='text-align:center; color:red;'>មិនអាចទាញទិន្នន័យបានទេ។</td></tr>";
+                document.getElementById('tableBody').innerHTML = "<tr><td colspan='6' style='text-align:center;'>Error loading data.</td></tr>";
             }
         }
 
@@ -118,28 +136,22 @@
             let total = 0;
             tableBody.innerHTML = "";
 
-            if (data.length === 0) {
-                tableBody.innerHTML = "<tr><td colspan='5' style='text-align:center; padding:20px;'>មិនទាន់មានទិន្នន័យ</td></tr>";
-                document.getElementById('totalBalance').innerText = "$0.00";
-                return;
-            }
-
             data.forEach(item => {
                 const c = parseFloat(item.cash || 0);
                 const cr = parseFloat(item.credit || 0);
                 total += (c + cr);
                 
-                const d = new Date(item.timestamp);
-                const dateStr = isNaN(d) ? "N/A" : d.toLocaleDateString('km-KH');
+                const displayDate = item.customDate ? new Date(item.customDate).toLocaleDateString('km-KH') : new Date(item.timestamp).toLocaleDateString('km-KH');
 
                 tableBody.innerHTML += `
                     <tr>
-                        <td style="font-weight:600;">${dateStr}</td>
+                        <td style="font-weight:600;">${displayDate}</td>
+                        <td>${item.agent || '-'}</td>
                         <td style="color:var(--primary-green); font-weight:700;">$${c.toLocaleString()}</td>
                         <td style="color:#e67e22; font-weight:700;">$${cr.toLocaleString()}</td>
-                        <td style="color:var(--text-light); font-style:italic;">${item.remark || '-'}</td>
+                        <td style="color:var(--text-light); font-size:12px;">${item.remark || '-'}</td>
                         <td style="text-align:right;">
-                            <button class="btn-icon btn-edit" onclick="editRow('${item.fileId}', ${c}, ${cr}, '${item.remark || ''}')">✎</button>
+                            <button class="btn-icon btn-edit" onclick="editRow('${item.fileId}', '${item.customDate}', '${item.agent}', ${c}, ${cr}, '${item.remark}')">✎</button>
                             <button class="btn-icon btn-delete" onclick="deleteRow('${item.fileId}')">🗑</button>
                         </td>
                     </tr>`;
@@ -148,6 +160,8 @@
         }
 
         async function sendToDrive() {
+            const customDate = document.getElementById('inputDate').value;
+            const agent = document.getElementById('agentName').value;
             const cash = document.getElementById('cashInput').value;
             const credit = document.getElementById('creditInput').value;
             const remark = document.getElementById('remarkInput').value;
@@ -155,18 +169,13 @@
             if(!cash && !credit) return alert("សូមបញ្ចូលទឹកប្រាក់");
 
             const payload = editingFileId 
-                ? { action: "UPDATE", fileId: editingFileId, newData: { cash, credit, remark, timestamp: new Date().toISOString() } }
-                : { cash, credit, remark, timestamp: new Date().toISOString() };
+                ? { action: "UPDATE", fileId: editingFileId, newData: { customDate, agent, cash, credit, remark, timestamp: new Date().toISOString() } }
+                : { customDate, agent, cash, credit, remark, timestamp: new Date().toISOString() };
 
             document.getElementById('status').innerText = "⏳ កំពុងរក្សាទុក...";
-            
-            try {
-                await fetch(WEB_APP_URL, { method: "POST", mode: "no-cors", body: JSON.stringify(payload) });
-                resetForm();
-                setTimeout(loadTransactions, 2000);
-            } catch (e) {
-                document.getElementById('status').innerText = "❌ បរាជ័យ";
-            }
+            await fetch(WEB_APP_URL, { method: "POST", mode: "no-cors", body: JSON.stringify(payload) });
+            resetForm();
+            setTimeout(loadTransactions, 2000);
         }
 
         async function deleteRow(id) {
@@ -178,18 +187,21 @@
             document.getElementById('status').innerText = "✅ លុបរួចរាល់";
         }
 
-        function editRow(id, c, cr, r) {
+        function editRow(id, date, agent, c, cr, r) {
             editingFileId = id;
+            document.getElementById('inputDate').value = date;
+            document.getElementById('agentName').value = agent;
             document.getElementById('cashInput').value = c;
             document.getElementById('creditInput').value = cr;
             document.getElementById('remarkInput').value = r;
             document.getElementById('formTitle').innerText = "កែប្រែទិន្នន័យ";
             document.getElementById('saveBtn').innerText = "ធ្វើបច្ចុប្បន្នភាព";
-            window.scrollTo({top: 0, behavior: 'smooth'});
         }
 
         function resetForm() {
             editingFileId = null;
+            document.getElementById('inputDate').valueAsDate = new Date();
+            document.getElementById('agentName').value = "";
             document.getElementById('cashInput').value = "";
             document.getElementById('creditInput').value = "";
             document.getElementById('remarkInput').value = "";
@@ -201,11 +213,9 @@
         function filterTransactions() {
             const date = document.getElementById('dateSearch').value;
             if (!date) return renderTable(allTransactions);
-            const filtered = allTransactions.filter(item => new Date(item.timestamp).toISOString().split('T')[0] === date);
+            const filtered = allTransactions.filter(item => (item.customDate || item.timestamp.split('T')[0]) === date);
             renderTable(filtered);
         }
-
-        window.onload = loadTransactions;
     </script>
 </body>
 </html>
