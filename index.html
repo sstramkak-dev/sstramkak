@@ -5,68 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ស្មាតសប អ៊េចប្រេស ត្រាំកក់</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Kantumruy+Pro:wght@400;600;700&display=swap" rel="stylesheet">
-    
     <style>
-        :root {
-            --primary-green: #1EA647;
-            --hover-green: #168a39;
-            --bg-gray: #f8fafc;
-            --text-main: #1e293b;
-            --text-light: #64748b;
-            --white: #ffffff;
-            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-        }
-
-        body {
-            margin: 0;
-            font-family: 'Kantumruy Pro', 'Inter', sans-serif;
-            display: flex;
-            height: 100vh;
-            background-color: var(--bg-gray);
-            color: var(--text-main);
-        }
-
-        .sidebar { width: 280px; background: var(--white); border-right: 1px solid #e2e8f0; display: flex; flex-direction: column; padding: 40px 20px; }
-        .sidebar h2 { color: var(--primary-green); font-size: 22px; font-weight: 700; margin-bottom: 40px; text-align: center; line-height: 1.4; }
-
-        .nav-btn { background: none; border: none; padding: 14px 18px; text-align: left; font-size: 16px; font-weight: 600; cursor: pointer; border-radius: 12px; margin-bottom: 10px; color: var(--text-light); transition: 0.2s; }
-        .nav-btn.active { background-color: var(--primary-green); color: white; box-shadow: 0 10px 15px -3px rgba(30, 166, 71, 0.3); }
-
+        :root { --primary-green: #1EA647; --hover-green: #168a39; --bg-gray: #f8fafc; --text-main: #1e293b; --text-light: #64748b; }
+        body { margin: 0; font-family: 'Kantumruy Pro', sans-serif; display: flex; height: 100vh; background-color: var(--bg-gray); }
+        .sidebar { width: 280px; background: white; border-right: 1px solid #e2e8f0; padding: 40px 20px; }
+        .sidebar h2 { color: var(--primary-green); text-align: center; }
         .main-content { flex-grow: 1; padding: 40px; overflow-y: auto; }
-        .card { background: var(--white); padding: 28px; border-radius: 20px; box-shadow: var(--shadow); margin-bottom: 30px; border: 1px solid #f1f5f9; }
-
-        .balance-card { background: linear-gradient(135deg, var(--primary-green) 0%, #15803d 100%); color: white; max-width: 320px; }
-        .balance-card small { opacity: 0.8; font-size: 14px; text-transform: uppercase; }
-        .balance-card h1 { margin: 10px 0 0; font-size: 32px; font-weight: 700; }
-
-        .grid { display: flex; gap: 30px; flex-wrap: wrap; }
-        .form-container { flex: 1; min-width: 320px; }
-        .table-container { flex: 2; min-width: 500px; }
-
-        label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 5px; color: var(--text-main); }
-        input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1.5px solid #e2e8f0; border-radius: 10px; box-sizing: border-box; font-family: inherit; font-size: 15px; }
-        input:focus { outline: none; border-color: var(--primary-green); }
-
-        .submit-btn { background: var(--primary-green); color: white; border: none; padding: 16px; border-radius: 12px; cursor: pointer; width: 100%; font-weight: 700; font-size: 16px; font-family: inherit; }
-        .submit-btn:hover { background: var(--hover-green); }
-
+        .card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 25px; }
+        .balance-card { background: linear-gradient(135deg, var(--primary-green), #15803d); color: white; max-width: 320px; }
+        .grid { display: flex; gap: 25px; flex-wrap: wrap; }
+        input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1.5px solid #e2e8f0; border-radius: 10px; box-sizing: border-box; font-family: inherit; }
+        .submit-btn { background: var(--primary-green); color: white; border: none; padding: 16px; border-radius: 12px; cursor: pointer; width: 100%; font-weight: 700; font-family: inherit; }
         table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; padding: 12px; color: var(--text-light); font-size: 12px; border-bottom: 2px solid #f1f5f9; }
+        th { text-align: left; padding: 12px; color: var(--text-light); border-bottom: 2px solid #f1f5f9; font-size: 13px; }
         td { padding: 15px 12px; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
-
-        .btn-icon { border: none; background: #f8fafc; cursor: pointer; font-size: 16px; padding: 8px; border-radius: 8px; margin-left: 5px; transition: 0.2s; }
+        .btn-icon { border: none; background: #f1f5f9; cursor: pointer; font-size: 16px; padding: 8px; border-radius: 8px; margin-left: 5px; }
         .btn-edit { color: #2563eb; }
         .btn-delete { color: #dc2626; }
-        
-        .remark-text { font-size: 12px; color: var(--text-light); font-style: italic; }
     </style>
 </head>
 <body>
 
     <nav class="sidebar">
         <h2>ស្មាតសប អ៊េចប្រេស<br>ត្រាំកក់</h2>
-        <button class="nav-btn active">📊 ការដាក់ប្រាក់</button>
-        <button class="nav-btn">⚙️ ការកំណត់</button>
     </nav>
 
     <main class="main-content">
@@ -76,36 +37,23 @@
         </div>
 
         <div class="grid">
-            <div class="card form-container">
+            <div class="card" style="flex: 1; min-width: 320px;">
                 <h1 id="formTitle">ការដាក់ប្រាក់ថ្មី</h1>
-                
-                <label>សាច់ប្រាក់ (Cash $)</label>
-                <input type="number" id="cashInput" placeholder="0.00">
-                
-                <label>ជំពាក់ (Credit $)</label>
-                <input type="number" id="creditInput" placeholder="0.00">
-                
-                <label>ចំណាំ (Remark)</label>
-                <input type="text" id="remarkInput" placeholder="បញ្ជាក់ផ្សេងៗ...">
-                
-                <button class="submit-btn" id="saveBtn" onclick="sendToDrive()">រក្សាទុកទិន្នន័យ</button>
-                <span id="status" style="display:block; text-align:center; margin-top:15px; font-size:14px;"></span>
+                <label>សាច់ប្រាក់ ($)</label><input type="number" id="cashInput">
+                <label>ជំពាក់ ($)</label><input type="number" id="creditInput">
+                <label>ចំណាំ</label><input type="text" id="remarkInput">
+                <button class="submit-btn" id="saveBtn" onclick="sendToDrive()">រក្សាទុក</button>
+                <p id="status" style="text-align:center; font-size:14px; margin-top:10px;"></p>
             </div>
 
-            <div class="card table-container">
+            <div class="card" style="flex: 2; min-width: 450px;">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
                     <h1>ប្រតិបត្តិការថ្មីៗ</h1>
-                    <input type="date" id="dateSearch" onchange="filterTransactions()" style="width:auto; margin:0; padding:8px;">
+                    <input type="date" id="dateSearch" onchange="filterTransactions()" style="width:auto; margin:0;">
                 </div>
                 <table>
                     <thead>
-                        <tr>
-                            <th>កាលបរិច្ឆេទ</th>
-                            <th>សាច់ប្រាក់</th>
-                            <th>ជំពាក់</th>
-                            <th>ចំណាំ</th>
-                            <th style="text-align:right;">សកម្មភាព</th>
-                        </tr>
+                        <tr><th>កាលបរិច្ឆេទ</th><th>សាច់ប្រាក់</th><th>ជំពាក់</th><th>ចំណាំ</th><th style="text-align:right;">សកម្មភាព</th></tr>
                     </thead>
                     <tbody id="tableBody"></tbody>
                 </table>
@@ -114,91 +62,79 @@
     </main>
 
     <script>
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx0TSw5-WUwA60UpgxYrF_DQqiUsSTdH39wJS9_uiXqWrpb2a58ZVIdYdnk9wO4QSUcvA/exec";
-        let allTransactions = []; 
+        const WEB_APP_URL = "YOUR_NEW_DEPLOYED_URL"; // REPLACE THIS
+        let allTransactions = [];
         let editingFileId = null;
 
+        async function loadTransactions() {
+            try {
+                const response = await fetch(WEB_APP_URL);
+                allTransactions = await response.json();
+                renderTable(allTransactions);
+            } catch (e) { console.error("Load failed", e); }
+        }
+
+        function renderTable(data) {
+            const tableBody = document.getElementById('tableBody');
+            let total = 0;
+            tableBody.innerHTML = "";
+            data.forEach(item => {
+                const c = parseFloat(item.cash || 0);
+                const cr = parseFloat(item.credit || 0);
+                total += (c + cr);
+                tableBody.innerHTML += `
+                    <tr>
+                        <td>${new Date(item.timestamp).toLocaleDateString('km-KH')}</td>
+                        <td style="color:var(--primary-green); font-weight:700;">$${c}</td>
+                        <td style="color:orange; font-weight:700;">$${cr}</td>
+                        <td>${item.remark || '-'}</td>
+                        <td style="text-align:right;">
+                            <button class="btn-icon btn-edit" onclick="editRow('${item.fileId}', ${c}, ${cr}, '${item.remark}')">✎</button>
+                            <button class="btn-icon btn-delete" onclick="deleteRow('${item.fileId}')">🗑</button>
+                        </td>
+                    </tr>`;
+            });
+            document.getElementById('totalBalance').innerText = `$${total.toLocaleString()}`;
+        }
+
+        async function deleteRow(id) {
+            if (!confirm("តើអ្នកប្រាកដថាចង់លុបមែនទេ?")) return;
+            document.getElementById('status').innerText = "🗑 កំពុងលុប...";
+            
+            // Delete from Google Drive
+            await fetch(WEB_APP_URL, { method: "POST", mode: "no-cors", body: JSON.stringify({ action: "DELETE", fileId: id }) });
+
+            // Visual update immediately
+            allTransactions = allTransactions.filter(t => t.fileId !== id);
+            renderTable(allTransactions);
+            document.getElementById('status').innerText = "✅ លុបរួចរាល់";
+        }
+
         async function sendToDrive() {
-            const cash = document.getElementById('cashInput').value || 0;
-            const credit = document.getElementById('creditInput').value || 0;
-            const remark = document.getElementById('remarkInput').value || "";
-
-            if (cash == 0 && credit == 0) return alert("សូមបញ្ចូលចំនួនទឹកប្រាក់");
-
+            const cash = document.getElementById('cashInput').value;
+            const credit = document.getElementById('creditInput').value;
+            const remark = document.getElementById('remarkInput').value;
             const payload = editingFileId 
                 ? { action: "UPDATE", fileId: editingFileId, newData: { cash, credit, remark, timestamp: new Date().toISOString() } }
                 : { cash, credit, remark, timestamp: new Date().toISOString() };
 
             document.getElementById('status').innerText = "⏳ កំពុងរក្សាទុក...";
-            
             await fetch(WEB_APP_URL, { method: "POST", mode: "no-cors", body: JSON.stringify(payload) });
-            resetForm();
-            setTimeout(loadTransactions, 2000); 
-        }
-
-        async function loadTransactions() {
-            const response = await fetch(WEB_APP_URL);
-            const rawData = await response.json();
-            allTransactions = rawData.filter(item => item && (item.cash || item.credit));
-            renderTable(allTransactions);
-        }
-
-        function renderTable(data) {
-            const tableBody = document.getElementById('tableBody');
-            const balanceEl = document.getElementById('totalBalance');
-            tableBody.innerHTML = "";
-            let grandTotal = 0;
-
-            data.forEach(item => {
-                const c = parseFloat(item.cash) || 0;
-                const cr = parseFloat(item.credit) || 0;
-                grandTotal += (c + cr);
-
-                tableBody.innerHTML += `
-                    <tr>
-                        <td style="font-weight:600;">${new Date(item.timestamp).toLocaleDateString('km-KH')}</td>
-                        <td style="color:var(--primary-green); font-weight:700;">$${c.toLocaleString()}</td>
-                        <td style="color:#e67e22; font-weight:700;">$${cr.toLocaleString()}</td>
-                        <td class="remark-text">${item.remark || '-'}</td>
-                        <td style="text-align:right;">
-                            <button class="btn-icon btn-edit" onclick="editRow('${item.fileId}', '${item.cash}', '${item.credit}', '${item.remark}')">✎</button>
-                            <button class="btn-icon btn-delete" onclick="deleteRow('${item.fileId}')">🗑</button>
-                        </td>
-                    </tr>`;
-            });
-            balanceEl.innerText = `$${grandTotal.toLocaleString()}`;
-        }
-
-        async function deleteRow(id) {
-            if (!confirm("តើអ្នកប្រាកដថាចង់លុបមែនទេ?")) return;
-            await fetch(WEB_APP_URL, { method: "POST", mode: "no-cors", body: JSON.stringify({ action: "DELETE", fileId: id }) });
-            loadTransactions();
-        }
-
-        function editRow(id, cash, credit, remark) {
-            editingFileId = id;
-            document.getElementById('cashInput').value = cash;
-            document.getElementById('creditInput').value = credit;
-            document.getElementById('remarkInput').value = remark;
-            document.getElementById('formTitle').innerText = "កែប្រែទិន្នន័យ";
-            document.getElementById('saveBtn').innerText = "ធ្វើបច្ចុប្បន្នភាព";
-        }
-
-        function resetForm() {
+            
             editingFileId = null;
             document.getElementById('cashInput').value = "";
             document.getElementById('creditInput').value = "";
             document.getElementById('remarkInput').value = "";
-            document.getElementById('formTitle').innerText = "ការដាក់ប្រាក់ថ្មី";
-            document.getElementById('saveBtn').innerText = "រក្សាទុក";
             document.getElementById('status').innerText = "✅ រួចរាល់";
+            setTimeout(loadTransactions, 2000);
         }
 
-        function filterTransactions() {
-            const date = document.getElementById('dateSearch').value;
-            if (!date) return renderTable(allTransactions);
-            const filtered = allTransactions.filter(item => new Date(item.timestamp).toISOString().split('T')[0] === date);
-            renderTable(filtered);
+        function editRow(id, c, cr, r) {
+            editingFileId = id;
+            document.getElementById('cashInput').value = c;
+            document.getElementById('creditInput').value = cr;
+            document.getElementById('remarkInput').value = r;
+            document.getElementById('formTitle').innerText = "កែប្រែទិន្នន័យ";
         }
 
         window.onload = loadTransactions;
