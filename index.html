@@ -7,215 +7,227 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Kantumruy+Pro:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root { --primary-green: #1EA647; --hover-green: #168a39; --bg-gray: #f8fafc; --text-main: #1e293b; --text-light: #64748b; }
-        body { margin: 0; font-family: 'Kantumruy Pro', 'Inter', sans-serif; display: flex; height: 100vh; background-color: var(--bg-gray); color: var(--text-main); }
+        body { margin: 0; font-family: 'Kantumruy Pro', sans-serif; display: flex; height: 100vh; background-color: var(--bg-gray); }
         
-        .sidebar { width: 280px; background: white; border-right: 1px solid #e2e8f0; padding: 40px 20px; display: flex; flex-direction: column; }
-        .sidebar-title { color: var(--primary-green); font-size: 22px; font-weight: 700; margin-bottom: 40px; text-align: center; line-height: 1.4; border-bottom: 2px solid #f1f5f9; padding-bottom: 20px; }
-        
-        .nav-btn { background: none; border: none; padding: 14px 18px; text-align: left; font-size: 16px; font-weight: 600; cursor: pointer; border-radius: 12px; margin-bottom: 10px; color: var(--text-light); transition: 0.2s; font-family: inherit; }
-        .nav-btn.active { background-color: var(--primary-green); color: white; box-shadow: 0 10px 15px -3px rgba(30, 166, 71, 0.3); }
+        /* Sidebar */
+        .sidebar { width: 260px; background: white; border-right: 1px solid #e2e8f0; padding: 30px 15px; display: flex; flex-direction: column; }
+        .sidebar-title { color: var(--primary-green); font-size: 20px; font-weight: 700; text-align: center; margin-bottom: 30px; line-height: 1.4; }
+        .nav-btn { background: none; border: none; padding: 14px; text-align: left; font-size: 15px; font-weight: 600; cursor: pointer; border-radius: 10px; margin-bottom: 8px; color: var(--text-light); transition: 0.2s; font-family: inherit; }
+        .nav-btn.active { background-color: var(--primary-green); color: white; }
 
-        .main-content { flex-grow: 1; padding: 40px; overflow-y: auto; }
-        .card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 25px; }
-        .balance-card { background: linear-gradient(135deg, var(--primary-green), #15803d); color: white; max-width: 320px; }
-        .balance-card small { opacity: 0.8; font-size: 13px; text-transform: uppercase; }
-        .balance-card h1 { margin: 5px 0 0; font-size: 32px; }
-
-        .grid { display: flex; gap: 25px; flex-wrap: wrap; }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px; color: var(--text-main); }
-        input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1.5px solid #e2e8f0; border-radius: 10px; box-sizing: border-box; font-family: inherit; font-size: 14px; }
-        input:focus { outline: none; border-color: var(--primary-green); box-shadow: 0 0 0 3px rgba(30, 166, 71, 0.1); }
+        /* Main Content */
+        .main-content { flex-grow: 1; padding: 30px; overflow-y: auto; }
+        .card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px; border: 1px solid #f1f5f9; }
+        .grid-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 15px; }
         
-        .submit-btn { background: var(--primary-green); color: white; border: none; padding: 16px; border-radius: 12px; cursor: pointer; width: 100%; font-weight: 700; font-size: 16px; font-family: inherit; transition: 0.2s; margin-top: 10px; }
-        .submit-btn:hover { background: var(--hover-green); }
-
-        .table-container { flex: 2; min-width: 500px; }
-        table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; padding: 12px; color: var(--text-light); border-bottom: 2px solid #f1f5f9; font-size: 12px; text-transform: uppercase; }
-        td { padding: 12px; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
+        label { display: block; font-size: 12px; font-weight: 700; margin-bottom: 5px; color: var(--text-main); }
+        input { width: 100%; padding: 10px; border: 1.5px solid #e2e8f0; border-radius: 8px; box-sizing: border-box; font-family: inherit; font-size: 14px; }
+        .section-title { font-size: 16px; font-weight: 700; color: var(--primary-green); margin-bottom: 15px; border-left: 4px solid var(--primary-green); padding-left: 10px; }
         
-        .btn-icon { border: none; background: #f1f5f9; cursor: pointer; font-size: 16px; padding: 8px; border-radius: 8px; margin-left: 5px; transition: 0.2s; }
-        .btn-edit { color: #2563eb; }
-        .btn-delete { color: #dc2626; }
+        .submit-btn { background: var(--primary-green); color: white; border: none; padding: 12px; border-radius: 10px; cursor: pointer; width: 100%; font-weight: 700; font-family: inherit; margin-top: 10px; }
+        
+        /* Table */
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        th { text-align: left; padding: 10px; background: #f8fafc; color: var(--text-light); border-bottom: 2px solid #edf2f7; }
+        td { padding: 10px; border-bottom: 1px solid #f1f5f9; }
+        .btn-icon { border: none; background: #f1f5f9; cursor: pointer; padding: 6px; border-radius: 6px; margin-left: 4px; }
+        .btn-edit { color: #2563eb; } .btn-delete { color: #dc2626; }
+        
+        .hidden { display: none; }
     </style>
 </head>
 <body>
 
     <nav class="sidebar">
         <div class="sidebar-title">ស្មាតសប អ៊េចប្រេស<br>ត្រាំកក់</div>
-        <button class="nav-btn active">📊 ការដាក់ប្រាក់</button>
-        <button class="nav-btn">⚙️ ការកំណត់</button>
+        <button class="nav-btn active" onclick="showTab('depositTab', this)">📊 ការដាក់ប្រាក់</button>
+        <button class="nav-btn" onclick="showTab('salesTab', this)">🛒 ការលក់ប្រចាំថ្ងៃ</button>
     </nav>
 
     <main class="main-content">
-        <div class="card balance-card">
-            <small>សមតុល្យសរុប (Total Balance)</small>
-            <h1 id="totalBalance">$0.00</h1>
-        </div>
+        <p id="status" style="text-align:right; font-weight:bold; color:var(--primary-green);"></p>
 
-        <div class="grid">
-            <div class="card" style="flex: 1; min-width: 350px; height: fit-content;">
-                <h1 id="formTitle" style="font-size: 18px; margin-bottom: 20px;">ការដាក់ប្រាក់ថ្មី</h1>
-                
-                <div class="form-row">
-                    <div>
-                        <label>កាលបរិច្ឆេទ (Date)</label>
-                        <input type="date" id="inputDate">
-                    </div>
-                    <div>
-                        <label>ភ្នាក់ងារ (Agent Name)</label>
-                        <input type="text" id="agentName" placeholder="ឈ្មោះភ្នាក់ងារ">
-                    </div>
+        <div id="depositTab">
+            <div class="card">
+                <div class="section-title">ការដាក់ប្រាក់ថ្មី</div>
+                <div class="grid-form">
+                    <div><label>កាលបរិច្ឆេទ</label><input type="date" id="depDate"></div>
+                    <div><label>ភ្នាក់ងារ</label><input type="text" id="depAgent"></div>
+                    <div><label>Cash ($)</label><input type="number" id="depCash"></div>
+                    <div><label>Credit ($)</label><input type="number" id="depCredit"></div>
                 </div>
-
-                <div class="form-row">
-                    <div>
-                        <label>Cash ($)</label>
-                        <input type="number" id="cashInput" placeholder="0.00">
-                    </div>
-                    <div>
-                        <label>Credit ($)</label>
-                        <input type="number" id="creditInput" placeholder="0.00">
-                    </div>
-                </div>
-                
-                <label>ចំណាំ (Remark)</label>
-                <input type="text" id="remarkInput" placeholder="...">
-                
-                <button class="submit-btn" id="saveBtn" onclick="sendToDrive()">រក្សាទុកទិន្នន័យ</button>
-                <p id="status" style="text-align:center; font-size:14px; margin-top:10px; font-weight:600;"></p>
+                <label>ចំណាំ</label><input type="text" id="depRemark">
+                <button class="submit-btn" onclick="saveData('Deposit')">រក្សាទុកការដាក់ប្រាក់</button>
             </div>
 
-            <div class="card table-container">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-                    <h1 style="font-size: 18px;">ប្រតិបត្តិការថ្មីៗ</h1>
-                    <input type="date" id="dateSearch" onchange="filterTransactions()" style="width:auto; margin:0; padding:8px;">
-                </div>
+            <div class="card">
+                <div class="section-title">ប្រវត្តិដាក់ប្រាក់</div>
                 <table>
-                    <thead>
-                        <tr>
-                            <th>កាលបរិច្ឆេទ</th>
-                            <th>ភ្នាក់ងារ</th>
-                            <th>Cash</th>
-                            <th>Credit</th>
-                            <th>ចំណាំ</th>
-                            <th style="text-align:right;">សកម្មភាព</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tableBody"></tbody>
+                    <thead><tr><th>កាលបរិច្ឆេទ</th><th>ភ្នាក់ងារ</th><th>Cash</th><th>Credit</th><th>សកម្មភាព</th></tr></thead>
+                    <tbody id="depTableBody"></tbody>
                 </table>
+            </div>
+        </div>
+
+        <div id="salesTab" class="hidden">
+            <div class="card">
+                <div class="section-title">ការលក់ថ្មី</div>
+                <div class="grid-form">
+                    <div><label>កាលបរិច្ឆេទ</label><input type="date" id="salDate"></div>
+                    <div><label>ភ្នាក់ងារ</label><input type="text" id="salAgent"></div>
+                </div>
+                
+                <label style="color: blue; margin-top: 10px;">📉 គិតជាឯកតា (Unit)</label>
+                <div class="grid-form">
+                    <div><label>Gross Ads</label><input type="number" id="unitGross" value="0"></div>
+                    <div><label>Change SIM</label><input type="number" id="unitSim" value="0"></div>
+                    <div><label>Smart@Home</label><input type="number" id="unitHome" value="0"></div>
+                    <div><label>Smart Fiber+</label><input type="number" id="unitFiber" value="0"></div>
+                </div>
+
+                <label style="color: blue; margin-top: 10px;">💰 គិតជាទឹកប្រាក់ (Revenue $)</label>
+                <div class="grid-form">
+                    <div><label>Top Up</label><input type="number" id="revTopup" value="0"></div>
+                    <div><label>SC Shop</label><input type="number" id="revShop" value="0"></div>
+                    <div><label>SC Dealer</label><input type="number" id="revDealer" value="0"></div>
+                    <div><label>Total Revenue</label><input type="number" id="revTotal" value="0"></div>
+                </div>
+                <button class="submit-btn" onclick="saveData('Sales')">រក្សាទុកការលក់</button>
+            </div>
+
+            <div class="card">
+                <div class="section-title">ប្រវត្តិការលក់</div>
+                <div style="overflow-x: auto;">
+                    <table>
+                        <thead>
+                            <tr><th>កាលបរិច្ឆេទ</th><th>ភ្នាក់ងារ</th><th>Ads/SIM</th><th>Home/Fiber</th><th>Total Rev</th><th>សកម្មភាព</th></tr>
+                        </thead>
+                        <tbody id="salTableBody"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </main>
 
     <script>
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxPPjccMG1Khugas4r7GdcfBKoFwcWYauQN0sayOg8ksy0XQtCckGJSqGYwroow-6RB6g/exec";
-        let allTransactions = [];
-        let editingFileId = null;
+        let allData = [];
+        let editingId = null;
 
-        // Set default date to today
-        window.onload = () => {
-            document.getElementById('inputDate').valueAsDate = new Date();
-            loadTransactions();
-        };
-
-        async function loadTransactions() {
-            try {
-                const response = await fetch(WEB_APP_URL);
-                const data = await response.json();
-                allTransactions = Array.isArray(data) ? data : [];
-                renderTable(allTransactions);
-            } catch (e) {
-                document.getElementById('tableBody').innerHTML = "<tr><td colspan='6' style='text-align:center;'>Error loading data.</td></tr>";
-            }
+        function showTab(tabId, btn) {
+            document.getElementById('depositTab').classList.add('hidden');
+            document.getElementById('salesTab').classList.add('hidden');
+            document.getElementById(tabId).classList.remove('hidden');
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
         }
 
-        function renderTable(data) {
-            const tableBody = document.getElementById('tableBody');
-            let total = 0;
-            tableBody.innerHTML = "";
+        async function loadData() {
+            const res = await fetch(WEB_APP_URL);
+            allData = await res.json();
+            renderTables();
+        }
 
-            data.forEach(item => {
-                const c = parseFloat(item.cash || 0);
-                const cr = parseFloat(item.credit || 0);
-                total += (c + cr);
-                
-                const displayDate = item.customDate ? new Date(item.customDate).toLocaleDateString('km-KH') : new Date(item.timestamp).toLocaleDateString('km-KH');
+        function renderTables() {
+            const depBody = document.getElementById('depTableBody');
+            const salBody = document.getElementById('salTableBody');
+            depBody.innerHTML = ""; salBody.innerHTML = "";
 
-                tableBody.innerHTML += `
-                    <tr>
-                        <td style="font-weight:600;">${displayDate}</td>
-                        <td>${item.agent || '-'}</td>
-                        <td style="color:var(--primary-green); font-weight:700;">$${c.toLocaleString()}</td>
-                        <td style="color:#e67e22; font-weight:700;">$${cr.toLocaleString()}</td>
-                        <td style="color:var(--text-light); font-size:12px;">${item.remark || '-'}</td>
-                        <td style="text-align:right;">
-                            <button class="btn-icon btn-edit" onclick="editRow('${item.fileId}', '${item.customDate}', '${item.agent}', ${c}, ${cr}, '${item.remark}')">✎</button>
-                            <button class="btn-icon btn-delete" onclick="deleteRow('${item.fileId}')">🗑</button>
+            allData.forEach(item => {
+                if (item.recordType === "Deposit") {
+                    depBody.innerHTML += `<tr>
+                        <td>${item.date}</td><td>${item.agent}</td>
+                        <td>$${item.cash}</td><td>$${item.credit}</td>
+                        <td>
+                            <button class="btn-icon btn-edit" onclick="editDeposit('${item.fileId}')">✎</button>
+                            <button class="btn-icon btn-delete" onclick="deleteItem('${item.fileId}')">🗑</button>
                         </td>
                     </tr>`;
+                } else {
+                    salBody.innerHTML += `<tr>
+                        <td>${item.date}</td><td>${item.agent}</td>
+                        <td>${item.gross}/${item.sim}</td><td>${item.home}/${item.fiber}</td>
+                        <td style="font-weight:bold; color:green">$${item.totalRev}</td>
+                        <td>
+                            <button class="btn-icon btn-edit" onclick="editSales('${item.fileId}')">✎</button>
+                            <button class="btn-icon btn-delete" onclick="deleteItem('${item.fileId}')">🗑</button>
+                        </td>
+                    </tr>`;
+                }
             });
-            document.getElementById('totalBalance').innerText = `$${total.toLocaleString()}`;
         }
 
-        async function sendToDrive() {
-            const customDate = document.getElementById('inputDate').value;
-            const agent = document.getElementById('agentName').value;
-            const cash = document.getElementById('cashInput').value;
-            const credit = document.getElementById('creditInput').value;
-            const remark = document.getElementById('remarkInput').value;
+        async function saveData(type) {
+            let payload = { formType: type, timestamp: new Date().toISOString() };
+            if (type === "Deposit") {
+                payload.date = document.getElementById('depDate').value;
+                payload.agent = document.getElementById('depAgent').value;
+                payload.cash = document.getElementById('depCash').value;
+                payload.credit = document.getElementById('depCredit').value;
+                payload.remark = document.getElementById('depRemark').value;
+            } else {
+                payload.date = document.getElementById('salDate').value;
+                payload.agent = document.getElementById('salAgent').value;
+                payload.gross = document.getElementById('unitGross').value;
+                payload.sim = document.getElementById('unitSim').value;
+                payload.home = document.getElementById('unitHome').value;
+                payload.fiber = document.getElementById('unitFiber').value;
+                payload.topup = document.getElementById('revTopup').value;
+                payload.shop = document.getElementById('revShop').value;
+                payload.dealer = document.getElementById('revDealer').value;
+                payload.totalRev = document.getElementById('revTotal').value;
+            }
 
-            if(!cash && !credit) return alert("សូមបញ្ចូលទឹកប្រាក់");
-
-            const payload = editingFileId 
-                ? { action: "UPDATE", fileId: editingFileId, newData: { customDate, agent, cash, credit, remark, timestamp: new Date().toISOString() } }
-                : { customDate, agent, cash, credit, remark, timestamp: new Date().toISOString() };
+            if (editingId) {
+                payload = { action: "UPDATE", fileId: editingId, newData: payload };
+            }
 
             document.getElementById('status').innerText = "⏳ កំពុងរក្សាទុក...";
             await fetch(WEB_APP_URL, { method: "POST", mode: "no-cors", body: JSON.stringify(payload) });
-            resetForm();
-            setTimeout(loadTransactions, 2000);
+            editingId = null;
+            location.reload();
         }
 
-        async function deleteRow(id) {
-            if (!confirm("តើអ្នកប្រាកដថាចង់លុបមែនទេ?")) return;
-            document.getElementById('status').innerText = "🗑 កំពុងលុប...";
+        async function deleteItem(id) {
+            if (!confirm("លុបទិន្នន័យនេះ?")) return;
             await fetch(WEB_APP_URL, { method: "POST", mode: "no-cors", body: JSON.stringify({ action: "DELETE", fileId: id }) });
-            allTransactions = allTransactions.filter(t => t.fileId !== id);
-            renderTable(allTransactions);
-            document.getElementById('status').innerText = "✅ លុបរួចរាល់";
+            loadData();
         }
 
-        function editRow(id, date, agent, c, cr, r) {
-            editingFileId = id;
-            document.getElementById('inputDate').value = date;
-            document.getElementById('agentName').value = agent;
-            document.getElementById('cashInput').value = c;
-            document.getElementById('creditInput').value = cr;
-            document.getElementById('remarkInput').value = r;
-            document.getElementById('formTitle').innerText = "កែប្រែទិន្នន័យ";
-            document.getElementById('saveBtn').innerText = "ធ្វើបច្ចុប្បន្នភាព";
+        function editDeposit(id) {
+            const item = allData.find(i => i.fileId === id);
+            editingId = id;
+            document.getElementById('depDate').value = item.date;
+            document.getElementById('depAgent').value = item.agent;
+            document.getElementById('depCash').value = item.cash;
+            document.getElementById('depCredit').value = item.credit;
+            document.getElementById('depRemark').value = item.remark;
+            window.scrollTo(0,0);
         }
 
-        function resetForm() {
-            editingFileId = null;
-            document.getElementById('inputDate').valueAsDate = new Date();
-            document.getElementById('agentName').value = "";
-            document.getElementById('cashInput').value = "";
-            document.getElementById('creditInput').value = "";
-            document.getElementById('remarkInput').value = "";
-            document.getElementById('formTitle').innerText = "ការដាក់ប្រាក់ថ្មី";
-            document.getElementById('saveBtn').innerText = "រក្សាទុកទិន្នន័យ";
-            document.getElementById('status').innerText = "";
+        function editSales(id) {
+            const item = allData.find(i => i.fileId === id);
+            editingId = id;
+            showTab('salesTab', document.querySelectorAll('.nav-btn')[1]);
+            document.getElementById('salDate').value = item.date;
+            document.getElementById('salAgent').value = item.agent;
+            document.getElementById('unitGross').value = item.gross;
+            document.getElementById('unitSim').value = item.sim;
+            document.getElementById('unitHome').value = item.home;
+            document.getElementById('unitFiber').value = item.fiber;
+            document.getElementById('revTopup').value = item.topup;
+            document.getElementById('revShop').value = item.shop;
+            document.getElementById('revDealer').value = item.dealer;
+            document.getElementById('revTotal').value = item.totalRev;
+            window.scrollTo(0,0);
         }
 
-        function filterTransactions() {
-            const date = document.getElementById('dateSearch').value;
-            if (!date) return renderTable(allTransactions);
-            const filtered = allTransactions.filter(item => (item.customDate || item.timestamp.split('T')[0]) === date);
-            renderTable(filtered);
-        }
+        window.onload = () => {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('depDate').value = today;
+            document.getElementById('salDate').value = today;
+            loadData();
+        };
     </script>
 </body>
 </html>
