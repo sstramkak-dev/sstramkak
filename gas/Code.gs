@@ -14,7 +14,7 @@
  *
  * TopUp sheet columns (auto-created if missing):
  *   id, customerId, name, phone, amount, agent, branch, date,
- *   endDate,   ← expire date entered by user in the TopUp form
+ *   Expire Date,   ← mapped from payload.expDate (also accepts expireDate / endDate)
  *   tariff, remark, tuStatus, lat, lng
  *
  * Deployment:
@@ -74,6 +74,12 @@ function handleSync(sheetName, data) {
 
   var ss    = SpreadsheetApp.getActiveSpreadsheet();
   var sheet = getOrCreateSheet(ss, sheetName);
+
+  // Normalise records: for the TopUp sheet, map expDate → 'Expire Date'
+  // and apply YYYY-MM-DD date formatting.  Reassign data to the normalised copy.
+  if (sheetName === 'TopUp') {
+    data = data.map(normalizeTopUpRecord);
+  }
 
   // Derive the ordered list of columns from the existing header + any new keys
   // found in the incoming data.
@@ -215,6 +221,55 @@ function ensureHeaders(sheet, data) {
   }
 
   return existingHeaders;
+}
+
+/**
+ * Normalise a single TopUp record so that the expire-date value is stored in
+ * the 'Expire Date' column as a YYYY-MM-DD string.
+ *
+ * Accepted source field names (in priority order):
+ *   expDate  ← primary (confirmed by user)
+ *   expireDate
+ *   endDate  ← legacy fallback
+ */
+function normalizeTopUpRecord(record) {
+  // Shallow copy using Object.assign for compatibility with Apps Script V8
+  var out = Object.assign({}, record);
+
+  // Resolve expire-date value from whichever field is present
+  var rawDate =
+    record['expDate'] !== undefined    ? record['expDate']    :
+    record['expireDate'] !== undefined ? record['expireDate'] :
+    record['endDate'] !== undefined    ? record['endDate']    :
+    record['Expire Date'];             // already mapped
+
+  if (rawDate !== undefined) {
+    out['Expire Date'] = toYmd(rawDate);
+    // Remove the legacy source keys so the sheet column is 'Expire Date'
+    delete out['expDate'];
+    delete out['expireDate'];
+    delete out['endDate'];
+  }
+
+  return out;
+}
+
+/**
+ * Normalise a date value to a YYYY-MM-DD string.
+ * Accepts a JS Date object, ISO string, or YYYY-MM-DD string.
+ * Returns '' for null / unrecognised values.
+ */
+function toYmd(v) {
+  if (v === null || v === undefined || v === '') return '';
+  // Already a YYYY-MM-DD string
+  if (typeof v === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(v.trim())) return v.trim();
+  // Date object or parseable string
+  var d = (v instanceof Date) ? v : new Date(v);
+  if (isNaN(d.getTime())) return '';
+  var yyyy = d.getFullYear();
+  var mm   = ('0' + (d.getMonth() + 1)).slice(-2);
+  var dd   = ('0' + d.getDate()).slice(-2);
+  return yyyy + '-' + mm + '-' + dd;
 }
 
 /**
