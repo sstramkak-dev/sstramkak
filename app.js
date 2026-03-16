@@ -30,6 +30,7 @@ let _cKpiGauges = [];
 // Coverage map instances
 var _covMapSmartHome = null, _covMapSmartHome5G = null, _covMapSmartFiber = null;
 var _covPickerMap = null, _covPickerMarker = null, _covPickerHighlight = null;
+var _tuPickerMap = null, _tuPickerMarker = null;
 
 // Commune autocomplete state
 var _covCommuneDebounce = null;
@@ -924,6 +925,9 @@ function openModal(id) {
 function closeModal(id) {
   const el = g(id);
   if (el) { el.classList.remove('active'); setTimeout(function() { el.style.display = 'none'; }, 300); }
+  if (id === 'modal-topUp') {
+    if (_tuPickerMap) { _tuPickerMap.remove(); _tuPickerMap = null; _tuPickerMarker = null; }
+  }
 }
 
 function handleOverlay(e, id) {
@@ -2493,10 +2497,9 @@ function openCustomerModal(type, item) {
       g('tu-date').value = item.date || '';
       const endDateEl = g('tu-end-date'); if (endDateEl) endDateEl.value = item.endDate || '';
       const tuStatusSel = g('tu-status'); if (tuStatusSel) tuStatusSel.value = item.tuStatus || 'active';
-      const pkgPriceEl = g('tu-package-price'); if (pkgPriceEl) pkgPriceEl.value = item.packagePrice || '';
       const tuLatEl = g('tu-lat'); if (tuLatEl) tuLatEl.value = item.lat || '';
       const tuLngEl = g('tu-lng'); if (tuLngEl) tuLngEl.value = item.lng || '';
-      toggleTuLatlongRow(item.tuStatus || 'active');
+      toggleTuLatlongRow(item.tuStatus || 'active', item.lat, item.lng);
     } else {
       if (title) title.textContent = 'Add Top Up';
       g('tu-date').value = new Date().toISOString().split('T')[0];
@@ -2686,9 +2689,45 @@ function renderNewCustomerTable() {
   }).join('');
 }
 
-function toggleTuLatlongRow(status) {
+function toggleTuLatlongRow(status, existingLat, existingLng) {
   const row = g('tu-latlong-row');
-  if (row) row.style.display = status === 'terminate' ? '' : 'none';
+  if (!row) return;
+  if (status === 'terminate') {
+    row.style.display = '';
+    setTimeout(function() {
+      if (typeof L === 'undefined') return;
+      if (_tuPickerMap) { _tuPickerMap.remove(); _tuPickerMap = null; _tuPickerMarker = null; }
+      var pickerEl = g('tu-picker-map');
+      if (!pickerEl) return;
+      var lat0 = parseFloat(existingLat) || null;
+      var lng0 = parseFloat(existingLng) || null;
+      var center = (lat0 && lng0) ? [lat0, lng0] : KH_CENTER;
+      var zoom = (lat0 && lng0) ? 14 : 7;
+      _tuPickerMap = L.map('tu-picker-map').setView(center, zoom);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 18,
+        attribution: '© OpenStreetMap contributors'
+      }).addTo(_tuPickerMap);
+      if (lat0 && lng0) {
+        _tuPickerMarker = L.marker([lat0, lng0]).addTo(_tuPickerMap);
+      }
+      _tuPickerMap.on('click', function(e) {
+        var lat = parseFloat(e.latlng.lat.toFixed(6));
+        var lng = parseFloat(e.latlng.lng.toFixed(6));
+        var latEl = g('tu-lat'); var lngEl = g('tu-lng');
+        if (latEl) latEl.value = lat;
+        if (lngEl) lngEl.value = lng;
+        if (_tuPickerMarker) _tuPickerMap.removeLayer(_tuPickerMarker);
+        _tuPickerMarker = L.marker([lat, lng]).addTo(_tuPickerMap);
+      });
+    }, 200);
+  } else {
+    row.style.display = 'none';
+    if (_tuPickerMap) { _tuPickerMap.remove(); _tuPickerMap = null; _tuPickerMarker = null; }
+    var latEl = g('tu-lat'); var lngEl = g('tu-lng');
+    if (latEl) latEl.value = '';
+    if (lngEl) lngEl.value = '';
+  }
 }
 
 function submitTopUp(e) {
@@ -2701,7 +2740,6 @@ function submitTopUp(e) {
     id: editId || uid(),
     customerId: existingRecord ? (existingRecord.customerId || '') : '',
     name: rv('tu-name'), phone: rv('tu-phone'), amount: parseFloat(rv('tu-amount')) || 0,
-    packagePrice: parseFloat(rv('tu-package-price')) || 0,
     agent: rv('tu-agent'), branch: rv('tu-branch'), date: rv('tu-date'),
     endDate: rv('tu-end-date') || '',
     tuStatus: tuStatus,
@@ -2818,7 +2856,7 @@ function renderTopUpTable() {
   }
 
   if (!baseTopUpList.length) {
-    tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;padding:40px;color:#999;"><i class="fas fa-coins" style="font-size:2rem;display:block;margin-bottom:8px;"></i>No top up records yet</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;padding:40px;color:#999;"><i class="fas fa-coins" style="font-size:2rem;display:block;margin-bottom:8px;"></i>No top up records yet</td></tr>';
     return;
   }
   const tuSearchVal = (rv('tu-search') || '').toLowerCase().trim();
@@ -2829,7 +2867,7 @@ function renderTopUpTable() {
       })
     : baseTopUpList;
   if (!tuList.length) {
-    tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;padding:40px;color:#999;"><i class="fas fa-coins" style="font-size:2rem;display:block;margin-bottom:8px;"></i>No results found</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;padding:40px;color:#999;"><i class="fas fa-coins" style="font-size:2rem;display:block;margin-bottom:8px;"></i>No results found</td></tr>';
     return;
   }
   tbody.innerHTML = tuList.map(function(c, i) {
@@ -2858,7 +2896,6 @@ function renderTopUpTable() {
       '<td><div class="name-cell"><span class="avatar-circle av-' + avIdx + '" style="width:30px;height:30px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:700;color:#fff;margin-right:8px;">' + esc(ini(c.name)) + '</span>' + esc(c.name) + '</div></td>' +
       '<td>' + esc(c.phone) + '</td>' +
       '<td>' + fmtMoney(c.amount) + '</td>' +
-      '<td>' + (c.packagePrice ? fmtMoney(c.packagePrice) : '—') + '</td>' +
       '<td><span class="pill ' + stPill + '">' + stLabel + '</span></td>' +
       '<td>' + esc(c.agent || '') + '</td>' +
       '<td>' + esc(c.branch || '') + '</td>' +
