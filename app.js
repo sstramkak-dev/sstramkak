@@ -1195,6 +1195,7 @@ function openNewSaleModal(sale) {
     const brSel = g('sale-branch');
     if (brSel) brSel.value = sale.branch || '';
     g('sale-date').value = sale.date || '';
+    g('sale-expire-date').value = sale.expireDate || '';
     g('sale-remark').value = sale.remark || sale.note || '';
 
     if (sale.items) {
@@ -1231,6 +1232,7 @@ function submitSale(e) {
   const agent = rv('sale-agent-name');
   const branch = rv('sale-branch');
   const date = rv('sale-date');
+  const expireDate = rv('sale-expire-date') || '';
   const note = rv('sale-remark');
 
   if (!agent) { showAlert('Please enter agent name'); return; }
@@ -1255,7 +1257,7 @@ function submitSale(e) {
 
   const now = new Date().toISOString();
   const existingRecord = editId ? saleRecords.find(function(x) { return x.id === editId; }) : null;
-  const obj = { id: editId || uid(), agent: agent, branch: branch, date: date, submittedAt: (existingRecord && existingRecord.submittedAt) || now, note: note, items: items, dollarItems: dollarItems };
+  const obj = { id: editId || uid(), agent: agent, branch: branch, date: date, expireDate: expireDate, submittedAt: (existingRecord && existingRecord.submittedAt) || now, note: note, items: items, dollarItems: dollarItems };
 
   if (editId) {
     if (existingRecord && !canModifySaleRecord(existingRecord)) { showSalePermissionError('edit'); return; }
