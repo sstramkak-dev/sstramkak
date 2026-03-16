@@ -2493,9 +2493,14 @@ function openCustomerModal(type, item) {
       g('tu-date').value = item.date || '';
       const endDateEl = g('tu-end-date'); if (endDateEl) endDateEl.value = item.endDate || '';
       const tuStatusSel = g('tu-status'); if (tuStatusSel) tuStatusSel.value = item.tuStatus || 'active';
+      const pkgPriceEl = g('tu-package-price'); if (pkgPriceEl) pkgPriceEl.value = item.packagePrice || '';
+      const tuLatEl = g('tu-lat'); if (tuLatEl) tuLatEl.value = item.lat || '';
+      const tuLngEl = g('tu-lng'); if (tuLngEl) tuLngEl.value = item.lng || '';
+      toggleTuLatlongRow(item.tuStatus || 'active');
     } else {
       if (title) title.textContent = 'Add Top Up';
       g('tu-date').value = new Date().toISOString().split('T')[0];
+      toggleTuLatlongRow('active');
       if (currentUser) {
         const agEl = g('tu-agent'); if (agEl) { agEl.value = currentUser.name || ''; if (currentRole === 'agent' || currentRole === 'supervisor') agEl.readOnly = true; }
         const brEl = g('tu-branch'); if (brEl && currentUser.branch) { brEl.value = currentUser.branch; if (currentRole === 'agent' || currentRole === 'supervisor') brEl.disabled = true; }
@@ -2518,6 +2523,8 @@ function openCustomerModal(type, item) {
       g('term-agent').value = item.agent || '';
       const bSel = g('term-branch'); if (bSel) bSel.value = item.branch || '';
       g('term-date').value = item.date || '';
+      const termLatEl = g('term-lat'); if (termLatEl) termLatEl.value = item.lat || '';
+      const termLngEl = g('term-lng'); if (termLngEl) termLngEl.value = item.lng || '';
     } else {
       if (title) title.textContent = 'Add Termination';
       g('term-date').value = new Date().toISOString().split('T')[0];
@@ -2679,6 +2686,11 @@ function renderNewCustomerTable() {
   }).join('');
 }
 
+function toggleTuLatlongRow(status) {
+  const row = g('tu-latlong-row');
+  if (row) row.style.display = status === 'terminate' ? '' : 'none';
+}
+
 function submitTopUp(e) {
   e.preventDefault();
   const editId = rv('tu-edit-id');
@@ -2689,9 +2701,11 @@ function submitTopUp(e) {
     id: editId || uid(),
     customerId: existingRecord ? (existingRecord.customerId || '') : '',
     name: rv('tu-name'), phone: rv('tu-phone'), amount: parseFloat(rv('tu-amount')) || 0,
+    packagePrice: parseFloat(rv('tu-package-price')) || 0,
     agent: rv('tu-agent'), branch: rv('tu-branch'), date: rv('tu-date'),
     endDate: rv('tu-end-date') || '',
-    tuStatus: tuStatus
+    tuStatus: tuStatus,
+    lat: rv('tu-lat') || '', lng: rv('tu-lng') || ''
   };
   if (!obj.name) { showAlert('Please enter customer name'); return; }
   if (!obj.phone) { showAlert('Please enter phone number'); return; }
@@ -2712,7 +2726,7 @@ function submitTopUp(e) {
     if (!existingTerminationRecord) {
       terminationList.push({
         id: uid(), customerId: obj.customerId || '', name: obj.name, phone: obj.phone, reason: 'Service terminated',
-        agent: obj.agent, branch: obj.branch, date: obj.date
+        agent: obj.agent, branch: obj.branch, date: obj.date, lat: obj.lat || '', lng: obj.lng || ''
       });
       syncSheet('Terminations', terminationList);
       renderTerminationTable();
@@ -2804,7 +2818,7 @@ function renderTopUpTable() {
   }
 
   if (!baseTopUpList.length) {
-    tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;padding:40px;color:#999;"><i class="fas fa-coins" style="font-size:2rem;display:block;margin-bottom:8px;"></i>No top up records yet</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;padding:40px;color:#999;"><i class="fas fa-coins" style="font-size:2rem;display:block;margin-bottom:8px;"></i>No top up records yet</td></tr>';
     return;
   }
   const tuSearchVal = (rv('tu-search') || '').toLowerCase().trim();
@@ -2815,7 +2829,7 @@ function renderTopUpTable() {
       })
     : baseTopUpList;
   if (!tuList.length) {
-    tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;padding:40px;color:#999;"><i class="fas fa-coins" style="font-size:2rem;display:block;margin-bottom:8px;"></i>No results found</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;padding:40px;color:#999;"><i class="fas fa-coins" style="font-size:2rem;display:block;margin-bottom:8px;"></i>No results found</td></tr>';
     return;
   }
   tbody.innerHTML = tuList.map(function(c, i) {
@@ -2844,6 +2858,7 @@ function renderTopUpTable() {
       '<td><div class="name-cell"><span class="avatar-circle av-' + avIdx + '" style="width:30px;height:30px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:700;color:#fff;margin-right:8px;">' + esc(ini(c.name)) + '</span>' + esc(c.name) + '</div></td>' +
       '<td>' + esc(c.phone) + '</td>' +
       '<td>' + fmtMoney(c.amount) + '</td>' +
+      '<td>' + (c.packagePrice ? fmtMoney(c.packagePrice) : '—') + '</td>' +
       '<td><span class="pill ' + stPill + '">' + stLabel + '</span></td>' +
       '<td>' + esc(c.agent || '') + '</td>' +
       '<td>' + esc(c.branch || '') + '</td>' +
@@ -2863,7 +2878,8 @@ function submitTermination(e) {
   const obj = {
     id: editId || uid(),
     name: rv('term-name'), phone: rv('term-phone'), reason: rv('term-reason'),
-    agent: rv('term-agent'), branch: rv('term-branch'), date: rv('term-date')
+    agent: rv('term-agent'), branch: rv('term-branch'), date: rv('term-date'),
+    lat: rv('term-lat') || '', lng: rv('term-lng') || ''
   };
   if (!obj.name) { showAlert('Please enter customer name'); return; }
   if (!obj.phone) { showAlert('Please enter phone number'); return; }
@@ -2909,7 +2925,7 @@ function renderTerminationTable() {
   if (!tbody) return;
   const baseTermList = getBaseRecordsForRole(terminationList);
   if (!baseTermList.length) {
-    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:40px;color:#999;"><i class="fas fa-times-circle" style="font-size:2rem;display:block;margin-bottom:8px;"></i>No termination records yet</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:40px;color:#999;"><i class="fas fa-times-circle" style="font-size:2rem;display:block;margin-bottom:8px;"></i>No termination records yet</td></tr>';
     return;
   }
   const termSearchVal = (rv('term-search') || '').toLowerCase().trim();
@@ -2920,7 +2936,7 @@ function renderTerminationTable() {
       })
     : baseTermList;
   if (!termList.length) {
-    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:40px;color:#999;"><i class="fas fa-times-circle" style="font-size:2rem;display:block;margin-bottom:8px;"></i>No results found</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:40px;color:#999;"><i class="fas fa-times-circle" style="font-size:2rem;display:block;margin-bottom:8px;"></i>No results found</td></tr>';
     return;
   }
   tbody.innerHTML = termList.map(function(c, i) {
@@ -2934,6 +2950,7 @@ function renderTerminationTable() {
       '<td>' + esc(c.agent || '') + '</td>' +
       '<td>' + esc(c.branch || '') + '</td>' +
       '<td>' + esc(c.date || '') + '</td>' +
+      '<td>' + (c.lat || c.lng ? [c.lat, c.lng].filter(Boolean).map(esc).join(', ') : '—') + '</td>' +
       '<td style="white-space:nowrap;">' +
         (canEdit ? '<button class="btn-edit" onclick="editTermination(\'' + esc(c.id) + '\')"><i class="fas fa-edit"></i></button> ' : '') +
         (canEdit ? '<button class="btn-delete" onclick="deleteTermination(\'' + esc(c.id) + '\')"><i class="fas fa-trash"></i></button>' : '') +
