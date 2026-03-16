@@ -2497,6 +2497,8 @@ function openCustomerModal(type, item) {
       g('tu-date').value = item.date || '';
       const endDateEl = g('tu-end-date'); if (endDateEl) endDateEl.value = item.endDate || '';
       const tuStatusSel = g('tu-status'); if (tuStatusSel) tuStatusSel.value = item.tuStatus || 'active';
+      const tuTariffEl = g('tu-tariff'); if (tuTariffEl) tuTariffEl.value = item.tariff || '';
+      const tuRemarkEl = g('tu-remark'); if (tuRemarkEl) tuRemarkEl.value = item.remark || '';
       const tuLatEl = g('tu-lat'); if (tuLatEl) tuLatEl.value = item.lat || '';
       const tuLngEl = g('tu-lng'); if (tuLngEl) tuLngEl.value = item.lng || '';
       toggleTuLatlongRow(item.tuStatus || 'active', item.lat, item.lng);
@@ -2742,6 +2744,8 @@ function submitTopUp(e) {
     name: rv('tu-name'), phone: rv('tu-phone'), amount: parseFloat(rv('tu-amount')) || 0,
     agent: rv('tu-agent'), branch: rv('tu-branch'), date: rv('tu-date'),
     endDate: rv('tu-end-date') || '',
+    tariff: rv('tu-tariff') || '',
+    remark: rv('tu-remark') || '',
     tuStatus: tuStatus,
     lat: rv('tu-lat') || '', lng: rv('tu-lng') || ''
   };
