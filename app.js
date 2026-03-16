@@ -1196,6 +1196,8 @@ function openNewSaleModal(sale) {
     if (brSel) brSel.value = sale.branch || '';
     g('sale-date').value = sale.date || '';
     g('sale-remark').value = sale.remark || sale.note || '';
+    const expireDateEl = g('sale-expire-date');
+    if (expireDateEl) expireDateEl.value = sale.expireDate || '';
 
     if (sale.items) {
       Object.keys(sale.items).forEach(function(iid) {
@@ -1231,6 +1233,7 @@ function submitSale(e) {
   const agent = rv('sale-agent-name');
   const branch = rv('sale-branch');
   const date = rv('sale-date');
+  const expireDate = rv('sale-expire-date');
   const note = rv('sale-remark');
 
   if (!agent) { showAlert('Please enter agent name'); return; }
@@ -1255,7 +1258,7 @@ function submitSale(e) {
 
   const now = new Date().toISOString();
   const existingRecord = editId ? saleRecords.find(function(x) { return x.id === editId; }) : null;
-  const obj = { id: editId || uid(), agent: agent, branch: branch, date: date, submittedAt: (existingRecord && existingRecord.submittedAt) || now, note: note, items: items, dollarItems: dollarItems };
+  const obj = { id: editId || uid(), agent: agent, branch: branch, date: date, expireDate: expireDate || '', submittedAt: (existingRecord && existingRecord.submittedAt) || now, note: note, items: items, dollarItems: dollarItems };
 
   if (editId) {
     if (existingRecord && !canModifySaleRecord(existingRecord)) { showSalePermissionError('edit'); return; }
@@ -1271,6 +1274,7 @@ function submitSale(e) {
   applyReportFilters();
   if (currentPage === 'dashboard') renderDashboard();
   syncSheet('Sales', saleRecords);
+  if (!editId) appendDailySale(obj);
   saveAllData();
   showToast(editId ? 'Sale record updated.' : 'Sale record added successfully.', 'success');
 }
@@ -1294,6 +1298,19 @@ function deleteSale(id) {
     saveAllData();
     showToast('Sale record deleted.', 'success');
   }, 'Delete Sale Record', 'Delete');
+}
+
+/**
+ * Append a single sale record to the DailySale sheet via the Apps Script
+ * 'append' action.  The Apps Script handler flattens nested items and
+ * dollarItems into individual columns and guarantees the 'Expire Date' column.
+ * expireDate is included automatically — blank when not entered by the user.
+ */
+function appendDailySale(record) {
+  if (!GS_URL || !record) return;
+  var flat = normalizeRowForSheet(record);
+  _gsPost({ sheet: 'DailySale', action: 'append', data: flat })
+    .catch(function(err) { console.warn('DailySale append error:', err); });
 }
 
 // ------------------------------------------------------------
