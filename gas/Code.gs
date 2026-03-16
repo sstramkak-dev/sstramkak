@@ -14,7 +14,7 @@
  *
  * TopUp sheet columns (auto-created if missing):
  *   id, customerId, name, phone, amount, agent, branch, date,
- *   endDate,   ← expire date entered by user in the TopUp form
+ *   Expire Date,   ← expire date entered by user in the TopUp form (mapped from endDate)
  *   tariff, remark, tuStatus, lat, lng
  *
  * Deployment:
@@ -27,6 +27,29 @@
  *   4. Copy the new Web App URL and update GS_URL in app.js if it changed.
  *   5. Save — no other configuration is required; columns are created on first sync.
  */
+
+// ---------------------------------------------------------------------------
+// TopUp sheet configuration
+// ---------------------------------------------------------------------------
+
+/**
+ * Canonical column order for the TopUp sheet.
+ * These headers are written on first use and any missing ones are appended.
+ */
+var TOPUP_HEADERS = [
+  'id', 'customerId', 'name', 'phone', 'amount',
+  'agent', 'branch', 'date', 'Expire Date',
+  'tariff', 'remark', 'tuStatus', 'lat', 'lng'
+];
+
+/**
+ * Maps incoming record field names to their canonical column header names for
+ * the TopUp sheet.  Fields not listed here are written under their own key.
+ */
+var TOPUP_FIELD_MAP = {
+  endDate:    'Expire Date',
+  expireDate: 'Expire Date'
+};
 
 // ---------------------------------------------------------------------------
 // Entry point
@@ -65,6 +88,8 @@ function doGet() {
  * - Merges any new field keys into the header row (adds columns as needed).
  * - Existing rows without a new column get an empty string in that column.
  * - Backward-compatible: sheets that already have all columns are unaffected.
+ * - For the TopUp sheet, fields are remapped via TOPUP_FIELD_MAP and date
+ *   values are normalised to YYYY-MM-DD before writing.
  */
 function handleSync(sheetName, data) {
   if (!Array.isArray(data) || data.length === 0) {
@@ -75,9 +100,20 @@ function handleSync(sheetName, data) {
   var ss    = SpreadsheetApp.getActiveSpreadsheet();
   var sheet = getOrCreateSheet(ss, sheetName);
 
+  // For the TopUp sheet, remap field keys and normalise date values.
+  var normalised = (sheetName === 'TopUp')
+    ? data.map(normaliseTopUpRecord)
+    : data;
+
+  // Seed canonical headers for TopUp before deriving from the data keys so
+  // that the column order is stable and "Expire Date" is always present.
+  if (sheetName === 'TopUp') {
+    ensureTopUpHeaders(sheet);
+  }
+
   // Derive the ordered list of columns from the existing header + any new keys
   // found in the incoming data.
-  var headers = ensureHeaders(sheet, data);
+  var headers = ensureHeaders(sheet, normalised);
 
   // Clear data rows (keep header)
   var lastRow = sheet.getLastRow();
@@ -86,7 +122,7 @@ function handleSync(sheetName, data) {
   }
 
   // Write each record as a row
-  var rows = data.map(function(record) {
+  var rows = normalised.map(function(record) {
     return headers.map(function(col) {
       var val = record[col];
       return (val === undefined || val === null) ? '' : val;
@@ -215,6 +251,97 @@ function ensureHeaders(sheet, data) {
   }
 
   return existingHeaders;
+}
+
+// ---------------------------------------------------------------------------
+// TopUp-specific helpers
+// ---------------------------------------------------------------------------
+
+/**
+ * Write the canonical TopUp headers to the sheet if no header row exists yet,
+ * or append any missing canonical headers to the right of existing ones.
+ */
+function ensureTopUpHeaders(sheet) {
+  var lastCol = sheet.getLastColumn();
+  var existing = [];
+
+  if (lastCol > 0 && sheet.getLastRow() > 0) {
+    existing = sheet.getRange(1, 1, 1, lastCol).getValues()[0].map(String);
+  }
+
+  var hasHeaders = existing.some(function(h) { return h.trim() !== ''; });
+
+  if (!hasHeaders) {
+    sheet.getRange(1, 1, 1, TOPUP_HEADERS.length).setValues([TOPUP_HEADERS]);
+    sheet.setFrozenRows(1);
+    return;
+  }
+
+  var existingSet = {};
+  existing.forEach(function(h) { if (h) existingSet[h] = true; });
+
+  var toAdd = TOPUP_HEADERS.filter(function(h) { return !existingSet[h]; });
+  if (toAdd.length > 0) {
+    var startCol = existing.length + 1;
+    sheet.getRange(1, startCol, 1, toAdd.length).setValues([toAdd]);
+  }
+}
+
+/**
+ * Remap a raw TopUp record so that:
+ *  - `endDate` / `expireDate` → `Expire Date` (the canonical column name)
+ *  - Date values stored under `Expire Date` and `date` are normalised to YYYY-MM-DD.
+ *  - The original source field is removed to avoid creating a duplicate column.
+ */
+function normaliseTopUpRecord(record) {
+  var out = {};
+
+  Object.keys(record).forEach(function(key) {
+    var canonical = TOPUP_FIELD_MAP[key] || key;
+    var value     = record[key];
+
+    // Normalise both the expire-date column and the regular date column to YYYY-MM-DD.
+    if (canonical === 'Expire Date' || canonical === 'date') {
+      value = toYmd(value);
+    }
+
+    // If two source keys map to the same canonical column, prefer a non-empty
+    // value: keep the existing value if it is already set and non-empty.
+    if (canonical in out && (out[canonical] === '' || out[canonical] === null || out[canonical] === undefined)) {
+      out[canonical] = value;
+    } else if (!(canonical in out)) {
+      out[canonical] = value;
+    }
+  });
+
+  return out;
+}
+
+/**
+ * Normalise a value to a YYYY-MM-DD string.
+ * Returns an empty string if the value is absent or not parseable.
+ */
+function toYmd(v) {
+  if (v === null || v === undefined || v === '') return '';
+
+  // Google Apps Script Date object
+  if (Object.prototype.toString.call(v) === '[object Date]' && !isNaN(v.getTime())) {
+    return Utilities.formatDate(v, Session.getScriptTimeZone(), 'yyyy-MM-dd');
+  }
+
+  var s = String(v).trim();
+  if (!s) return '';
+
+  // Already YYYY-MM-DD
+  if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
+
+  // Try generic Date parsing as a fallback
+  var d = new Date(s);
+  if (!isNaN(d.getTime())) {
+    return Utilities.formatDate(d, Session.getScriptTimeZone(), 'yyyy-MM-dd');
+  }
+
+  return '';
 }
 
 /**
