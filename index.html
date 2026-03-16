@@ -1044,7 +1044,7 @@
           <div class="table-card">
             <div class="table-responsive">
               <table class="data-table">
-                <thead><tr><th>#</th><th>Customer Name</th><th>Phone</th><th>Amount</th><th>Status</th><th>Agent</th><th>Branch</th><th>Date</th><th>Expiry Date</th><th>Actions</th></tr></thead>
+                <thead><tr><th>#</th><th>Customer Name</th><th>Phone</th><th>Amount</th><th>Package Price</th><th>Status</th><th>Agent</th><th>Branch</th><th>Date</th><th>Expiry Date</th><th>Actions</th></tr></thead>
                 <tbody id="topup-table"></tbody>
               </table>
             </div>
@@ -1068,7 +1068,7 @@
           <div class="table-card">
             <div class="table-responsive">
               <table class="data-table">
-                <thead><tr><th>#</th><th>Customer Name</th><th>Phone</th><th>Reason</th><th>Agent</th><th>Branch</th><th>Date</th><th>Actions</th></tr></thead>
+                <thead><tr><th>#</th><th>Customer Name</th><th>Phone</th><th>Reason</th><th>Agent</th><th>Branch</th><th>Date</th><th>Lat/Long</th><th>Actions</th></tr></thead>
                 <tbody id="termination-table"></tbody>
               </table>
             </div>
@@ -1748,7 +1748,7 @@
             </div>
             <div class="form-group form-col">
               <label class="form-label" for="tu-status">Status <span class="required">*</span></label>
-              <select class="form-select" id="tu-status" required>
+              <select class="form-select" id="tu-status" required onchange="toggleTuLatlongRow(this.value)">
                 <option value="active">Active</option>
                 <option value="terminate">Terminate</option>
               </select>
@@ -1768,12 +1768,29 @@
           </div>
           <div class="form-row">
             <div class="form-group form-col">
+              <label class="form-label" for="tu-package-price">Package Price ($)</label>
+              <input type="number" class="form-input" id="tu-package-price" placeholder="0.00" min="0" step="0.01" />
+            </div>
+            <div class="form-group form-col"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group form-col">
               <label class="form-label" for="tu-date">Date <span class="required">*</span></label>
               <input type="date" class="form-input" id="tu-date" required />
             </div>
             <div class="form-group form-col">
               <label class="form-label" for="tu-end-date">Expiry Date</label>
               <input type="date" class="form-input" id="tu-end-date" />
+            </div>
+          </div>
+          <div class="form-row" id="tu-latlong-row" style="display:none;">
+            <div class="form-group form-col">
+              <label class="form-label" for="tu-lat">Latitude</label>
+              <input type="text" class="form-input" id="tu-lat" placeholder="e.g. 11.5564" />
+            </div>
+            <div class="form-group form-col">
+              <label class="form-label" for="tu-lng">Longitude</label>
+              <input type="text" class="form-input" id="tu-lng" placeholder="e.g. 104.9282" />
             </div>
           </div>
           <input type="hidden" id="tu-edit-id" />
@@ -1827,6 +1844,16 @@
           <div class="form-group">
             <label class="form-label" for="term-date">Date <span class="required">*</span></label>
             <input type="date" class="form-input" id="term-date" required />
+          </div>
+          <div class="form-row">
+            <div class="form-group form-col">
+              <label class="form-label" for="term-lat">Latitude</label>
+              <input type="text" class="form-input" id="term-lat" placeholder="e.g. 11.5564" />
+            </div>
+            <div class="form-group form-col">
+              <label class="form-label" for="term-lng">Longitude</label>
+              <input type="text" class="form-input" id="term-lng" placeholder="e.g. 104.9282" />
+            </div>
           </div>
           <input type="hidden" id="term-edit-id" />
         </div>
