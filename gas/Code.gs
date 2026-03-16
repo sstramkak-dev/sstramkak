@@ -12,6 +12,11 @@
  *   Sales, Customers, TopUp, Terminations, OutCoverage,
  *   Promotions, Deposits, KPI, Items, Coverage, Staff
  *
+ * Sales sheet columns (auto-created if missing):
+ *   id, agent, branch, date, expireDate, submittedAt, note,
+ *   items,       ← JSON-encoded Unit Group item quantities
+ *   dollarItems  ← JSON-encoded Dollar Group item values (incl. Total Revenue)
+ *
  * TopUp sheet columns (auto-created if missing):
  *   id, customerId, name, phone, amount, agent, branch, date,
  *   endDate,   ← expire date entered by user in the TopUp form
