@@ -7,10 +7,17 @@
  *   { sheet: 'SheetName', action: 'sync',   data: [ {...}, ... ] }  — full sheet upsert
  *   { sheet: 'SheetName', action: 'read'                          }  — return all rows as JSON
  *   { sheet: 'SheetName', action: 'delete', data: { id: '...' }   }  — delete row by id
+ *   { sheet: 'DailySale', action: 'append', data: { ... }         }  — append one Daily Sale row
  *
  * Sheets managed:
  *   Sales, Customers, TopUp, Terminations, OutCoverage,
- *   Promotions, Deposits, KPI, Items, Coverage, Staff
+ *   Promotions, Deposits, KPI, Items, Coverage, Staff, DailySale
+ *
+ * DailySale sheet columns (auto-created / guaranteed, including Expire Date):
+ *   Date, Expire Date, Agent, Branch,
+ *   Buy Number, ChangeSIM, Recharge, SC Dealer, Device + Accessories, Total Revenue,
+ *   Gross Ads, Smart@Home, Smart Fiber+, SmartNas, Monthly Upsell,
+ *   Note, Submitted At, ID
  *
  * TopUp sheet columns (auto-created if missing):
  *   id, customerId, name, phone, amount, agent, branch, date,
@@ -29,6 +36,44 @@
  */
 
 // ---------------------------------------------------------------------------
+// Configuration
+// ---------------------------------------------------------------------------
+
+/** Name of the Daily Sale sheet (change here if your sheet tab has a different name). */
+var DAILY_SALE_SHEET_NAME = 'DailySale';
+
+/**
+ * Fixed column order for the DailySale sheet.
+ * 'Expire Date' is always guaranteed — it will be blank when not supplied.
+ * Any extra headers already present in the sheet are preserved to the right.
+ */
+var DAILY_SALE_HEADERS = [
+  'Date', 'Expire Date', 'Agent', 'Branch',
+  'Buy Number', 'ChangeSIM', 'Recharge', 'SC Dealer', 'Device + Accessories', 'Total Revenue',
+  'Gross Ads', 'Smart@Home', 'Smart Fiber+', 'SmartNas', 'Monthly Upsell',
+  'Note', 'Submitted At', 'ID'
+];
+
+/** Maps payload dollarItems object keys → DailySale column names. */
+var DOLLAR_ITEM_MAP = {
+  'i9':  'Buy Number',
+  'i6':  'ChangeSIM',
+  'i7':  'Recharge',
+  'i10': 'SC Dealer',
+  'i11': 'Device + Accessories',
+  'i8':  'Total Revenue'
+};
+
+/** Maps payload items (unit group) object keys → DailySale column names. */
+var UNIT_ITEM_MAP = {
+  'i1': 'Gross Ads',
+  'i2': 'Smart@Home',
+  'i3': 'Smart Fiber+',
+  'i4': 'SmartNas',
+  'i5': 'Monthly Upsell'
+};
+
+// ---------------------------------------------------------------------------
 // Entry point
 // ---------------------------------------------------------------------------
 
@@ -44,6 +89,7 @@ function doPost(e) {
     if (action === 'sync')   return handleSync(sheetName, data);
     if (action === 'read')   return handleRead(sheetName);
     if (action === 'delete') return handleDelete(sheetName, data);
+    if (action === 'append') return handleAppend(sheetName, data);
 
     return jsonResponse({ error: 'Unknown action: ' + action });
   } catch (err) {
@@ -161,8 +207,160 @@ function handleDelete(sheetName, data) {
   return jsonResponse({ status: 'ok', deleted: deleted });
 }
 
+/**
+ * Append a single row to the specified sheet.
+ *
+ * For the DailySale sheet this function:
+ *   - Guarantees the fixed DAILY_SALE_HEADERS exist (including 'Expire Date').
+ *   - Flattens nested items / dollarItems objects into individual columns.
+ *   - Normalises Date and Expire Date to YYYY-MM-DD strings.
+ *   - Leaves 'Expire Date' blank when not provided in the payload.
+ *
+ * For any other sheet the function ensures headers from the data keys and
+ * appends the row as-is.
+ *
+ * Expected payload:
+ *   {
+ *     sheet:       'DailySale',
+ *     action:      'append',
+ *     data: {
+ *       id:          '<record id>',
+ *       agent:       '<name>',
+ *       branch:      '<branch>',
+ *       date:        'YYYY-MM-DD',
+ *       expireDate:  'YYYY-MM-DD',   // optional — blank if omitted
+ *       note:        '<remark>',
+ *       submittedAt: '<ISO timestamp>',
+ *       items:       { i1: 3, i2: 1, ... },      // unit group (object or JSON string)
+ *       dollarItems: { i9: 50, i7: 100, ... }     // dollar group (object or JSON string)
+ *     }
+ *   }
+ */
+function handleAppend(sheetName, data) {
+  if (!data || typeof data !== 'object') {
+    return jsonResponse({ error: 'Missing or invalid data' });
+  }
+
+  var ss    = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = getOrCreateSheet(ss, sheetName);
+
+  var isDaily = (sheetName === DAILY_SALE_SHEET_NAME);
+  var headers = isDaily ? ensureDailySaleHeaders(sheet) : ensureHeaders(sheet, [data]);
+  var flat    = isDaily ? flattenDailySaleRecord(data)  : data;
+
+  var row = headers.map(function(col) {
+    var val = flat[col];
+    return (val === undefined || val === null) ? '' : val;
+  });
+
+  sheet.appendRow(row);
+
+  return jsonResponse({ status: 'ok', columns: row.length });
+}
+
 // ---------------------------------------------------------------------------
-// Helpers
+// DailySale-specific helpers
+// ---------------------------------------------------------------------------
+
+/**
+ * Ensure the DailySale sheet has every column listed in DAILY_SALE_HEADERS.
+ * Any columns already in the sheet are preserved; missing ones are appended.
+ * Returns the final ordered list of header strings.
+ */
+function ensureDailySaleHeaders(sheet) {
+  var lastCol  = sheet.getLastColumn();
+  var existing = [];
+
+  if (lastCol > 0 && sheet.getLastRow() > 0) {
+    existing = sheet.getRange(1, 1, 1, lastCol).getValues()[0].map(String);
+  }
+
+  var missing = DAILY_SALE_HEADERS.filter(function(h) {
+    return existing.indexOf(h) < 0;
+  });
+
+  if (missing.length > 0) {
+    var startCol = existing.length + 1;
+    sheet.getRange(1, startCol, 1, missing.length).setValues([missing]);
+    existing = existing.concat(missing);
+  }
+
+  return existing;
+}
+
+/**
+ * Flatten a Daily Sale record (with nested items / dollarItems as objects or
+ * JSON strings) into a plain object keyed by DAILY_SALE_HEADERS column names.
+ *
+ * Rules:
+ *   - 'Date'        → formatDateStr(data.date)
+ *   - 'Expire Date' → formatDateStr(data.expireDate); blank string if absent
+ *   - Dollar/unit item columns → numeric value (0 when not present in payload)
+ */
+function flattenDailySaleRecord(data) {
+  var flat = {};
+
+  flat['Date']         = formatDateStr(data.date        || '');
+  flat['Expire Date']  = formatDateStr(data.expireDate  || '');  // blank when omitted
+  flat['Agent']        = data.agent       || '';
+  flat['Branch']       = data.branch      || '';
+  flat['Note']         = data.note        || data.remark || '';
+  flat['Submitted At'] = data.submittedAt || '';
+  flat['ID']           = data.id          || '';
+
+  var dollarItems = parseJsonOrObj(data.dollarItems);
+  Object.keys(DOLLAR_ITEM_MAP).forEach(function(key) {
+    var colName = DOLLAR_ITEM_MAP[key];
+    var raw = dollarItems[key];
+    flat[colName] = (raw !== undefined && raw !== null) ? (parseFloat(raw) || 0) : 0;
+  });
+
+  var unitItems = parseJsonOrObj(data.items);
+  Object.keys(UNIT_ITEM_MAP).forEach(function(key) {
+    var colName = UNIT_ITEM_MAP[key];
+    var raw = unitItems[key];
+    flat[colName] = (raw !== undefined && raw !== null) ? (parseInt(raw, 10) || 0) : 0;
+  });
+
+  return flat;
+}
+
+/**
+ * Normalise a date value to a YYYY-MM-DD string.
+ * Returns an empty string when the value is absent or cannot be parsed.
+ */
+function formatDateStr(val) {
+  if (!val) return '';
+  if (typeof val === 'string') {
+    // Already YYYY-MM-DD — return as-is.
+    if (/^\d{4}-\d{2}-\d{2}$/.test(val)) return val;
+    // ISO timestamp — take only the date part.
+    if (/^\d{4}-\d{2}-\d{2}T/.test(val)) return val.split('T')[0];
+  }
+  try {
+    var d = new Date(val);
+    if (isNaN(d.getTime())) return '';
+    var y   = d.getFullYear();
+    var m   = String(d.getMonth() + 1).padStart(2, '0');
+    var day = String(d.getDate()).padStart(2, '0');
+    return y + '-' + m + '-' + day;
+  } catch (e) {
+    return '';
+  }
+}
+
+/**
+ * Parse a value that is either already an object or a JSON-encoded string.
+ * Returns an empty object on failure or when the value is absent.
+ */
+function parseJsonOrObj(val) {
+  if (!val) return {};
+  if (typeof val === 'object') return val;
+  try { return JSON.parse(val); } catch (e) { return {}; }
+}
+
+// ---------------------------------------------------------------------------
+// Generic sheet helpers
 // ---------------------------------------------------------------------------
 
 /**
