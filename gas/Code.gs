@@ -21,7 +21,7 @@
  *
  * TopUp sheet columns (auto-created if missing):
  *   id, customerId, name, phone, amount, agent, branch, date,
- *   Expire Date,   ← mapped from payload.expDate (also accepts expireDate / endDate)
+ *   Expire Date,   ← mapped from payload.endDate / expireDate / expDate via TOPUP_FIELD_MAP
  *   tariff, remark, tuStatus, lat, lng
  *
  * Deployment:
@@ -41,6 +41,30 @@
 
 /** Name of the Daily Sale sheet (change here if your sheet tab has a different name). */
 var DAILY_SALE_SHEET_NAME = 'DailySale';
+
+// ---------------------------------------------------------------------------
+// TopUp sheet configuration
+// ---------------------------------------------------------------------------
+
+/**
+ * Canonical column order for the TopUp sheet.
+ * These headers are written on first use; any missing ones are appended.
+ */
+var TOPUP_HEADERS = [
+  'id', 'customerId', 'name', 'phone', 'amount',
+  'agent', 'branch', 'date', 'Expire Date',
+  'tariff', 'remark', 'tuStatus', 'lat', 'lng'
+];
+
+/**
+ * Maps incoming record field names to their canonical column header names for
+ * the TopUp sheet.  Fields not listed here are written under their own key.
+ */
+var TOPUP_FIELD_MAP = {
+  endDate:    'Expire Date',
+  expireDate: 'Expire Date',
+  expDate:    'Expire Date'
+};
 
 /**
  * Fixed column order for the DailySale sheet.
@@ -121,10 +145,13 @@ function handleSync(sheetName, data) {
   var ss    = SpreadsheetApp.getActiveSpreadsheet();
   var sheet = getOrCreateSheet(ss, sheetName);
 
-  // Normalise records: for the TopUp sheet, map expDate → 'Expire Date'
-  // and apply YYYY-MM-DD date formatting.  Reassign data to the normalised copy.
+  // Normalise records: for the TopUp sheet, map endDate/expireDate/expDate →
+  // 'Expire Date' and apply YYYY-MM-DD date formatting.
   if (sheetName === 'TopUp') {
     data = data.map(normalizeTopUpRecord);
+    // Seed canonical headers so 'Expire Date' exists at the right position
+    // even when none of the incoming records contain an expire-date value.
+    ensureTopUpHeaders(sheet);
   }
 
   // Derive the ordered list of columns from the existing header + any new keys
@@ -422,48 +449,93 @@ function ensureHeaders(sheet, data) {
 }
 
 /**
+ * Write the canonical TOPUP_HEADERS to the sheet when no header row exists yet,
+ * or append any missing canonical headers to the right of existing ones.
+ * Freezes the first row so that the header stays visible while scrolling.
+ */
+function ensureTopUpHeaders(sheet) {
+  var lastCol  = sheet.getLastColumn();
+  var existing = [];
+
+  if (lastCol > 0 && sheet.getLastRow() > 0) {
+    existing = sheet.getRange(1, 1, 1, lastCol).getValues()[0].map(String);
+  }
+
+  var hasHeaders = existing.some(function(h) { return h.trim() !== ''; });
+
+  if (!hasHeaders) {
+    // Sheet is empty — write the full canonical header row.
+    sheet.getRange(1, 1, 1, TOPUP_HEADERS.length).setValues([TOPUP_HEADERS]);
+    sheet.setFrozenRows(1);
+    return;
+  }
+
+  // Append any canonical columns that are not yet present.
+  var existingSet = {};
+  existing.forEach(function(h) { if (h) existingSet[h] = true; });
+
+  var toAdd = TOPUP_HEADERS.filter(function(h) { return !existingSet[h]; });
+  if (toAdd.length > 0) {
+    var startCol = existing.length + 1;
+    sheet.getRange(1, startCol, 1, toAdd.length).setValues([toAdd]);
+  }
+}
+
+/**
  * Normalise a single TopUp record so that the expire-date value is stored in
  * the 'Expire Date' column as a YYYY-MM-DD string.
  *
- * Accepted source field names (in priority order):
- *   expDate  ← primary (confirmed by user)
- *   expireDate
- *   endDate  ← legacy fallback
+ * Uses TOPUP_FIELD_MAP to remap source field names to their canonical column
+ * headers.  Also normalises the 'Expire Date' and 'date' columns to YYYY-MM-DD.
+ * When two source keys (e.g. endDate and expireDate) map to the same column,
+ * the first non-empty value wins.
  */
 function normalizeTopUpRecord(record) {
-  // Shallow copy using Object.assign for compatibility with Apps Script V8
-  var out = Object.assign({}, record);
+  var out = {};
 
-  // Resolve expire-date value from whichever field is present
-  var rawDate =
-    record['expDate'] !== undefined    ? record['expDate']    :
-    record['expireDate'] !== undefined ? record['expireDate'] :
-    record['endDate'] !== undefined    ? record['endDate']    :
-    record['Expire Date'];             // already mapped
+  Object.keys(record).forEach(function(key) {
+    var canonical = TOPUP_FIELD_MAP[key] || key;
+    var value     = record[key];
 
-  if (rawDate !== undefined) {
-    out['Expire Date'] = toYmd(rawDate);
-    // Remove the legacy source keys so the sheet column is 'Expire Date'
-    delete out['expDate'];
-    delete out['expireDate'];
-    delete out['endDate'];
-  }
+    // Normalise date columns to YYYY-MM-DD.
+    if (canonical === 'Expire Date' || canonical === 'date') {
+      value = toYmd(value);
+    }
+
+    // When two source keys map to the same canonical column, keep the first
+    // non-empty value that was set.
+    if (canonical in out) {
+      if (!out[canonical]) {
+        out[canonical] = value;
+      }
+    } else {
+      out[canonical] = value;
+    }
+  });
 
   return out;
 }
 
 /**
  * Normalise a date value to a YYYY-MM-DD string.
- * Accepts a JS Date object, ISO string, or YYYY-MM-DD string.
+ * Uses Google Apps Script's Utilities.formatDate (with the script timezone)
+ * when running inside GAS for correct timezone handling.  Falls back to
+ * plain JavaScript Date parsing when running in a non-GAS environment.
  * Returns '' for null / unrecognised values.
  */
 function toYmd(v) {
   if (v === null || v === undefined || v === '') return '';
   // Already a YYYY-MM-DD string
   if (typeof v === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(v.trim())) return v.trim();
-  // Date object or parseable string
-  var d = (v instanceof Date) ? v : new Date(v);
+  // Date object or parseable string — use GAS Utilities when available
+  var d = (v instanceof Date) ? v : new Date(String(v).trim());
   if (isNaN(d.getTime())) return '';
+  if (typeof Utilities !== 'undefined' && typeof Session !== 'undefined') {
+    // GAS environment: use script timezone for correct local date
+    try {
+      return Utilities.formatDate(d, Session.getScriptTimeZone(), 'yyyy-MM-dd');
+    } catch (e) { /* fall through to plain JS */ }
+  }
   var yyyy = d.getFullYear();
   var mm   = ('0' + (d.getMonth() + 1)).slice(-2);
   var dd   = ('0' + d.getDate()).slice(-2);
